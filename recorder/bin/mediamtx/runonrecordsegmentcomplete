@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+rsync \
+    --progress \
+    --human-readable \
+    --compress \
+    --times \
+    ./rec/*.mp4 elity:/mnt/stor1/skyrecorder/rec/
