@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+sudo -v
+
+sudo apt install \
+    ffmpeg \
+    rsync \
+    screen
