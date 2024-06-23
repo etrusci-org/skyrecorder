@@ -1,0 +1,91 @@
+#!/usr/bin/env bash
+BIN_DIR=$(dirname $(readlink -f $BASH_SOURCE))
+APP_DIR=$(realpath ${BIN_DIR}/..)
+###############################################
+
+
+### CONF
+
+REC_DIR=${APP_DIR}/rec
+DAILY_DIR=${APP_DIR}/rec-daily
+THUMB_DIR=${APP_DIR}/rec-thumb
+
+BAKE_THUMBS=1
+BAKE_DAILIES=1
+
+
+### MAGIC
+
+if [ "$#" == "0" ]
+then
+    echo "usage: procrec <DATE>"
+    echo "examples:"
+    echo "> procrec today"
+    echo "> procrec yesterday"
+    echo "> procrec YYYY-MM-DD"
+    echo "> procrec YYYY-MM"
+    exit 1
+fi
+
+if [ "$1" == "today" ]
+then
+    REC_DATE=$(date +'%F')
+elif [ "$1" == "yesterday" ]
+then
+    REC_DATE=$(date -d 'yesterday' +'%F')
+else
+    REC_DATE=$1
+fi
+
+if [ ${#REC_DATE} == 10 ]
+then
+    INPUTS=${REC_DIR}/${REC_DATE}_*.mp4
+elif [ ${#REC_DATE} == 7 ]
+then
+    INPUTS=${REC_DIR}/${REC_DATE}-*_*.mp4
+else
+    echo "bad 'DATE' format: ${REC_DATE}"
+    exit 1
+fi
+
+if [ ! $(compgen -G $INPUTS) ]
+then
+    echo "no files found for ${REC_DATE}"
+    exit 1
+fi
+
+
+echo "processing '${REC_DATE}' files ..."
+
+
+if [ "$BAKE_THUMBS" == "1" ]
+then
+    echo "extracting recording thumbnails ..."
+    for f in $INPUTS
+    do
+        THUMB_FILE=${THUMB_DIR}/$(basename $f).jpg
+        ffmpeg -loglevel error -stats \
+            -i $f \
+            -frames:v 1 -q:v 1 \
+            $THUMB_FILE
+    done
+fi
+
+
+if [ "$BAKE_DAILIES" == "1" ]
+then
+    echo "combining '${REC_DATE}' recordings to one ..."
+
+    DAILY_FILE=${DAILY_DIR}/${REC_DATE}.mp4
+
+    ffmpeg -loglevel warning -stats \
+        -f concat -safe 0 \
+        -i <(for f in $INPUTS; do echo "file '$f'"; done) \
+        -c copy -an \
+        $DAILY_FILE
+
+    if [ -e $DAILY_FILE ]
+    then
+        stat -c "wrote %s bytes to %n" $DAILY_FILE
+    fi
+fi
