@@ -1,5 +1,14 @@
 #!/usr/bin/env bash
 
+### CONF
+
+DEVICE_PATH=/dev/video0
+PIX_FMT=yuv420p
+SRV_HOST=localhost
+
+
+### MAGIC
+
 RTSP_PORT=$1
 MTX_PATH=$2
 
@@ -7,10 +16,10 @@ ffmpeg \
     -loglevel warning \
     -stats \
     -f v4l2 \
-    -i /dev/video0 \
-    -pix_fmt yuv420p \
+    -i $DEVICE_PATH \
+    -pix_fmt $PIX_FMT \
     -preset ultrafast \
     -b:v 600k \
     -vf "drawtext=text='skyrecorder\ %{localtime\:%F\ %T}':fontcolor=white@0.5:fontsize=12:x=w-text_w-5:y=h-text_h-5" \
     -f rtsp \
-    rtsp://localhost:$RTSP_PORT/$MTX_PATH
+    rtsp://${SRV_HOST}:${RTSP_PORT}/${MTX_PATH}

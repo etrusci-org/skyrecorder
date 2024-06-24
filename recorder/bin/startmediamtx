@@ -4,11 +4,17 @@ APP_DIR=$(realpath ${BIN_DIR}/..)
 ###############################################
 
 
+### CONF
+
 MEDIAMTX_BIN=${BIN_DIR}/mediamtx/mediamtx
 MEDIAMTX_CONF=${BIN_DIR}/mediamtx/skyrecorder.yml
+SETCAMCTRL_BIN=${BIN_DIR}/setcamctrl
 
-cd $APP_DIR
 
-source ${BIN_DIR}/setcamctrl
+### MAGIC
+
+cd $APP_DIR # important for mediamtx because we use relative paths inside its scripts
+
+source $SETCAMCTRL_BIN
 
 $MEDIAMTX_BIN $MEDIAMTX_CONF

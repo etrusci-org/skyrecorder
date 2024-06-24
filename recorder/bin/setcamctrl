@@ -1,13 +1,20 @@
 #!/usr/bin/env bash
+BIN_DIR=$(dirname $(readlink -f $BASH_SOURCE))
+APP_DIR=$(realpath ${BIN_DIR}/..)
+###############################################
 
-# this is for the c920pro
+# these settings are for the c920pro - probe different cameras with v4l2-ctl first for their settings.
+
+### CONF
 
 DEVICE_PATH=/dev/video0
 WAIT_AFTER_SET=30s
 WAIT_AFTER_GET=30s
 
 
-echo "setting camera controls..."
+### MAGIC
+
+echo "setting camera controls ..."
 
 # NOTE: resolution+pixelformat and fps can not be set when device is already in use
 # NOTE2: fps limit of YUYV is 5 at 1920x1080 on c920pro
@@ -15,101 +22,102 @@ if [ "$(pidof mediamtx)" == "" ]
 then
     echo "> RESOLUTION+PIXELFORMAT"
     v4l2-ctl --device $DEVICE_PATH --set-fmt-video=width=1920,height=1080,pixelformat=YUYV
-    sleep 1s
+    sleep 2s
 
     echo "> FPS"
     v4l2-ctl --device $DEVICE_PATH --set-parm 5
-    sleep 1s
+    sleep 2s
 fi
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 echo "> BRIGHTNESS"
 v4l2-ctl --device $DEVICE_PATH --set-ctrl brightness=130
-sleep 1s
+sleep 2s
 
 echo "> CONTRAST"
 v4l2-ctl --device $DEVICE_PATH --set-ctrl contrast=135
-sleep 1s
+sleep 2s
 
 echo "> SATURATION"
 v4l2-ctl --device $DEVICE_PATH --set-ctrl saturation=133
-sleep 1s
+sleep 2s
 
 echo "> SHARPNESS"
 v4l2-ctl --device $DEVICE_PATH --set-ctrl sharpness=130
-sleep 1s
+sleep 2s
 
 echo "> WHITE_BALANCE_AUTOMATIC"
 v4l2-ctl --device $DEVICE_PATH --set-ctrl white_balance_automatic=0
-sleep 1s
+sleep 2s
 
 echo "> WHITE_BALANCE_TEMPERATURE"
 v4l2-ctl --device $DEVICE_PATH --set-ctrl white_balance_temperature=4700
-sleep 1s
+sleep 2s
 
 echo "> GAIN"
 v4l2-ctl --device $DEVICE_PATH --set-ctrl gain=0
-sleep 1s
+sleep 2s
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 echo "> BACKLIGHT_COMPENSATION"
 v4l2-ctl --device $DEVICE_PATH --set-ctrl backlight_compensation=0
-sleep 1s
+sleep 2s
 
 echo "> POWER_LINE_FREQUENCY"
 v4l2-ctl --device $DEVICE_PATH --set-ctrl power_line_frequency=1
-sleep 1s
+sleep 2s
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 echo "> AUTO_EXPOSURE"
 v4l2-ctl --device $DEVICE_PATH --set-ctrl auto_exposure=3
-sleep 1s
+sleep 2s
 
 # NOTE: exposure_time_absolute can not be set when auto_exposure=3
 # echo "> EXPOSURE_TIME_ABSOLUTE"
 # v4l2-ctl --device $DEVICE_PATH --set-ctrl exposure_time_absolute=10
-# sleep 1s
+# sleep 2s
 
 echo "> EXPOSURE_DYNAMIC_FRAMERATE"
 v4l2-ctl --device $DEVICE_PATH --set-ctrl exposure_dynamic_framerate=0
-sleep 1s
+sleep 2s
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 echo "> FOCUS_ABSOLUTE"
 v4l2-ctl --device $DEVICE_PATH --set-ctrl focus_absolute=0
-sleep 1s
+sleep 2s
 
 echo "> FOCUS_AUTOMATIC_CONTINUOUS"
 v4l2-ctl --device $DEVICE_PATH --set-ctrl focus_automatic_continuous=0
-sleep 1s
+sleep 2s
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 echo "> PAN_ABSOLUTE"
 v4l2-ctl --device $DEVICE_PATH --set-ctrl pan_absolute=0
-sleep 1s
+sleep 2s
 
 echo "> TILT_ABSOLUTE"
 v4l2-ctl --device $DEVICE_PATH --set-ctrl tilt_absolute=0
-sleep 1s
+sleep 2s
 
 echo "> ZOOM_ABSOLUTE"
 v4l2-ctl --device $DEVICE_PATH --set-ctrl zoom_absolute=100
-sleep 1s
+sleep 2s
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-echo "waiting for controls to settle..."
+echo "waiting for controls to settle ..."
 
 sleep $WAIT_AFTER_SET
 
 echo "current control settings:"
 
 v4l2-ctl --device $DEVICE_PATH --get-parm
+sleep 2s
 v4l2-ctl --device $DEVICE_PATH --list-ctrls-menus
 
 sleep $WAIT_AFTER_GET

@@ -1,8 +1,15 @@
 #!/usr/bin/env bash
 
+### CONF
+
+RSYNC_DEST=elity:/mnt/stor1/skyrecorder/rec/
+
+
+### MAGIC
+
 rsync \
     --progress \
     --human-readable \
     --compress \
     --times \
-    ./rec/*.mp4 elity:/mnt/stor1/skyrecorder/rec/
+    ./rec/*.mp4 $RSYNC_DEST
