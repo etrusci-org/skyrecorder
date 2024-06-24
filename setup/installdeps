@@ -3,6 +3,9 @@
 sudo -v
 
 sudo apt install \
+    bash \
     ffmpeg \
+    openssh-client \
+    openssh-server \
     rsync \
     screen
