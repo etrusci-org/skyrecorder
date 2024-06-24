@@ -60,21 +60,39 @@ echo "processing '${REC_DATE}' files ..."
 
 if [ "$BAKE_THUMBS" == "1" ]
 then
-    echo "extracting recording thumbnails ..."
+    echo "extracting recording thumbs ..."
+
+    c=$((0))
+    s=$((0))
+
     for f in $INPUTS
     do
         THUMB_FILE=${THUMB_DIR}/$(basename $f).jpg
-        ffmpeg -loglevel error -stats \
+
+        # FIXME: this ffmpeg command still gives warning/errors
+        # [swscaler @ 0x55a3950a0a40] [swscaler @ 0x55a3950b2400] deprecated pixel format used, make sure you did set range correctly
+        # [image2 @ 0x55a39260e380] The specified filename '2024-06-24_08-02-42.mp4.jpg' does not contain an image sequence pattern or a pattern is invalid.
+        # ok because we name it manually i assume: [image2 @ 0x55a39260e380] Use a pattern such as %03d for an image sequence or use the -update option (with -frames:v 1 if needed) to write a single image.
+        ffmpeg -loglevel warning -stats \
             -i $f \
-            -frames:v 1 -q:v 1 \
+            -frames:v 1 \
+            -q:v 1 \
             $THUMB_FILE
+
+        if [ -e $THUMB_FILE ]
+        then
+            c=$(($c + 1))
+            s=$(($s + $(stat -c %s $THUMB_FILE)))
+        fi
     done
+
+    echo "wrote ${s} bytes to ${c} thumb files"
 fi
 
 
 if [ "$BAKE_DAILIES" == "1" ]
 then
-    echo "combining '${REC_DATE}' recordings to one ..."
+    echo "combining daily videos to one ..."
 
     DAILY_FILE=${DAILY_DIR}/${REC_DATE}.mp4
 
@@ -86,6 +104,6 @@ then
 
     if [ -e $DAILY_FILE ]
     then
-        stat -c "wrote %s bytes to %n" $DAILY_FILE
+        echo "wrote $(stat -c %s $DAILY_FILE) bytes to $(basename $DAILY_FILE)"
     fi
 fi
