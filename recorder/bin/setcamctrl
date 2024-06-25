@@ -1,18 +1,18 @@
 #!/usr/bin/env bash
 BIN_DIR=$(dirname $(readlink -f $BASH_SOURCE))
 APP_DIR=$(realpath ${BIN_DIR}/..)
-###############################################
+#=============================================
 
 # these settings are for the c920pro - probe different cameras with v4l2-ctl first for their settings.
 
-### CONF
+#=== CONF
 
 DEVICE_PATH=/dev/video0
 WAIT_AFTER_SET=30s
 WAIT_AFTER_GET=30s
 
 
-### MAGIC
+#=== MAGIC
 
 echo "setting camera controls ..."
 
@@ -28,8 +28,6 @@ then
     v4l2-ctl --device $DEVICE_PATH --set-parm 5
     sleep 2s
 fi
-
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 echo "> BRIGHTNESS"
 v4l2-ctl --device $DEVICE_PATH --set-ctrl brightness=130
@@ -59,8 +57,6 @@ echo "> GAIN"
 v4l2-ctl --device $DEVICE_PATH --set-ctrl gain=0
 sleep 2s
 
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 echo "> BACKLIGHT_COMPENSATION"
 v4l2-ctl --device $DEVICE_PATH --set-ctrl backlight_compensation=0
 sleep 2s
@@ -68,8 +64,6 @@ sleep 2s
 echo "> POWER_LINE_FREQUENCY"
 v4l2-ctl --device $DEVICE_PATH --set-ctrl power_line_frequency=1
 sleep 2s
-
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 echo "> AUTO_EXPOSURE"
 v4l2-ctl --device $DEVICE_PATH --set-ctrl auto_exposure=3
@@ -84,8 +78,6 @@ echo "> EXPOSURE_DYNAMIC_FRAMERATE"
 v4l2-ctl --device $DEVICE_PATH --set-ctrl exposure_dynamic_framerate=0
 sleep 2s
 
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 echo "> FOCUS_ABSOLUTE"
 v4l2-ctl --device $DEVICE_PATH --set-ctrl focus_absolute=0
 sleep 2s
@@ -93,8 +85,6 @@ sleep 2s
 echo "> FOCUS_AUTOMATIC_CONTINUOUS"
 v4l2-ctl --device $DEVICE_PATH --set-ctrl focus_automatic_continuous=0
 sleep 2s
-
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 echo "> PAN_ABSOLUTE"
 v4l2-ctl --device $DEVICE_PATH --set-ctrl pan_absolute=0
@@ -107,8 +97,6 @@ sleep 2s
 echo "> ZOOM_ABSOLUTE"
 v4l2-ctl --device $DEVICE_PATH --set-ctrl zoom_absolute=100
 sleep 2s
-
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 echo "waiting for controls to settle ..."
 

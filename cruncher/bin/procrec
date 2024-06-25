@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 BIN_DIR=$(dirname $(readlink -f $BASH_SOURCE))
 APP_DIR=$(realpath ${BIN_DIR}/..)
-###############################################
+#=============================================
 
 
-### CONF
+#=== CONF
 
 REC_DIR=${APP_DIR}/rec
 DAILY_DIR=${APP_DIR}/rec-daily
@@ -13,7 +13,7 @@ BAKE_THUMBS=1
 BAKE_DAILIES=1
 
 
-### MAGIC
+#=== MAGIC
 
 if [ "$#" == "0" ]
 then

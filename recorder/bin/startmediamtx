@@ -1,17 +1,17 @@
 #!/usr/bin/env bash
 BIN_DIR=$(dirname $(readlink -f $BASH_SOURCE))
 APP_DIR=$(realpath ${BIN_DIR}/..)
-###############################################
+#=============================================
 
 
-### CONF
+#=== CONF
 
 MEDIAMTX_BIN=${BIN_DIR}/mediamtx/mediamtx
 MEDIAMTX_CONF=${BIN_DIR}/mediamtx/skyrecorder.yml
 SETCAMCTRL_BIN=${BIN_DIR}/setcamctrl
 
 
-### MAGIC
+#=== MAGIC
 
 cd $APP_DIR # important for mediamtx because we use relative paths inside its scripts
 

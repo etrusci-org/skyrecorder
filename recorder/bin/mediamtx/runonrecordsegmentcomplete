@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 
-### CONF
+#=== CONF
 
 RSYNC_DEST=elity:/mnt/stor1/skyrecorder/rec/
 
 
-### MAGIC
+#=== MAGIC
 
 rsync \
     --progress \
