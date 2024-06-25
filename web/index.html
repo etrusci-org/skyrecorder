@@ -1,1 +1,74 @@
-:-)
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="application-name" content="skyrecorder">
+    <style>
+        body {
+            background-color: black;
+            color: gray;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        progress {
+            width: 100%;
+        }
+    </style>
+    <title>skyrecorder</title>
+</head>
+<body>
+    <noscript>
+        <strong>THIS SITE REQUIRES JAVASCRIPT TO WORK.</strong>
+        Here are <a href="https://www.enable-javascript.com/">instructions how to enable JavaScript in your web browser</a>.
+    </noscript>
+
+    <h1>skyrecorder</h1>
+
+    <p>
+        New setup currently in test phase until end of June 2024.
+        <s>The most prominent new feature is surely the live stream of the camera that records for the monthly timelapses.
+        But also</s> in the background everything was redone from scratch.
+        There will be more here once everything is automated, tested, and running stable. Stay tuned :-)
+    </p>
+
+    <hr>
+
+    <h2>live view</h2>
+    <p>
+        this image updates roughly every 15 minutes.<br>
+        script will automatically check every 5 minutes.<br>
+        <progress class="lvcd" max="" value=""></progress>
+    </p>
+
+
+
+    <img class="lvimg" src="./latest.jpg">
+
+    <hr>
+
+    <script>
+        const LVUPDINTERVAL = 300_000
+        const LVUPDTICK = 1_000
+        const LVCD = document.querySelector('progress.lvcd')
+        const LVIMG = document.querySelector('img.lvimg')
+
+        LVCD.setAttribute('max', String(LVUPDINTERVAL))
+
+        let nextupdon = Date.now() + LVUPDINTERVAL
+
+        setInterval(() => {
+            LVCD.setAttribute('value', String(Math.max(0, nextupdon - Date.now())))
+            if (Date.now() >= nextupdon) {
+                LVIMG.setAttribute('src', `./latest.jpg?t=${Date.now()/1000}`)
+                nextupdon = Date.now() + LVUPDINTERVAL
+            }
+        }, LVUPDTICK)
+    </script>
+
+</body>
+</html>
