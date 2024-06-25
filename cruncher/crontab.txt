@@ -1,2 +1,2 @@
 # m    h  dom mon dow   command
-  0    3   *   *   *    /mnt/stor1/skyrecorder/bin/procrec yesterday >> /mnt/stor1/skyrecorder/log/procrec.log
+  0    3   *   *   *    /mnt/stor1/skyrecorder/bin/bakedate yesterday >> /mnt/stor1/skyrecorder/log/bakedate.log
