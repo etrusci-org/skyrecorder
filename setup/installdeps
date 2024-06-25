@@ -5,6 +5,7 @@ sudo -v
 sudo apt install \
     bash \
     ffmpeg \
+    inotify-tools \
     openssh-client \
     openssh-server \
     rsync \
