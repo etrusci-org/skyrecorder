@@ -22,10 +22,16 @@ do
 
     THUMB_FILE=${THUMB_DIR}/$(basename $f).jpg
 
-    ffmpeg  -loglevel warning -stats \
+    # ffmpeg -loglevel warning -stats \
+    #     -i $f \
+    #     -frames:v 1 \
+    #     -q:v 1 \
+    #     $THUMB_FILE
+    ffmpeg -loglevel warning -stats \
         -sseof -1 \
         -i $f \
         -q:v 1 \
+        -update 1 \
         $THUMB_FILE
 
     if [ -e $THUMB_FILE ]
