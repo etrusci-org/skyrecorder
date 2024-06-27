@@ -7,14 +7,14 @@
     <meta name="color-scheme" content="light dark">
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.slate.min.css">
-
     <style>
-        img.lvimg { border-radius: 6px; }
-
-        select {
-            width: fit-content;
-            max-width: 100%;
+        a {
+            cursor: pointer;
         }
+
+        .timelapse_nav ul li:first-child { font-weight: bold; }
+
+        .timelapse_nav s { opacity: .3; }
 
         .videobox {
             position: relative;
@@ -24,21 +24,26 @@
             max-width: 100%;
         }
 
-            .videobox iframe {
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                max-height: 100%;
-                margin: 0;
-            }
+        .videobox iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            max-height: 100%;
+            margin: 0;
+        }
 
+        img, iframe { border-radius: 6px; }
 
-        footer { margin-top: 50vh; }
+        .hidden { display: none; }
 
-
+        footer {
+            text-align: right;
+            margin-top: 100vh;
+        }
     </style>
+
     <title>skyrecorder</title>
 </head>
 <body>
@@ -48,36 +53,26 @@
     </noscript>
 
     <header class="container">
-        <h1>skyrecorder</h1>
-        <p>
-            New setup currently in test phase until end of June 2024.
-            Everything was redone from scratch. Things may still change a lot.
-            There will be more here once everything is automated, tested, and running stable. Stay tuned :-)
-        </p>
+        <div class="grid">
+            <h1>skyrecorder</h1>
+            <p>
+                New setup currently in test phase until end of June 2024.
+            </p>
+        </div>
     </header>
 
 
     <main class="container">
         <article>
-            <h2>live view</h2>
-            <p>
-                this image is updated roughly every 15 minutes.<br>
-                script will automatically check in <span class="lvcdv">_</span> seconds for new image.
-            </p>
-            <p>
-                <img class="lvimg" src="./latest.jpg">
-                <progress class="lvcd" max="" value=""></progress>
-            </p>
+            <h2>recent view</h2>
+            <img class="recent"><br>
+            <progress class="recent"></progress>
         </article>
 
         <article>
             <h2>timelapse archive</h2>
-
-            <select class="archive-nav">
-                <option value="" selected disabled>&lt; select month &gt;</option>
-            </select>
-
-            <div class="archive-content"></div>
+            <div class="timelapse_nav"></div>
+            <div class="timelapse_embed hidden"></div>
         </article>
     </main>
 
@@ -88,7 +83,151 @@
 
 
     <script type="module">
-        import { DATA } from './data.js'
+        import { SKYRECORDER_DATA } from './data.js'
+
+
+        window.addEventListener('load', () => {
+            const SR = new SkyRecorder(SKYRECORDER_DATA)
+        }, false)
+
+
+        class SkyRecorder
+        {
+            data = {}
+            LazyMedia
+            e = {
+                recent_image_selector: 'img.recent',
+                recent_progress_selector: 'progress.recent',
+                timelapse_nav_selector: 'div.timelapse_nav',
+                timelapse_embed_selector: 'div.timelapse_embed',
+                recent_image: null,
+                timelapse_nav: null,
+                timelapse_embed: null,
+            }
+            recent_image_url = './latest.jpg?t={timestamp}'
+            recent_interval = 1_800_000
+            recent_tick = 1_000
+
+
+            constructor(data)
+            {
+                console.log(`skyrecorder <https://sky.etrusci.org>`)
+
+                if (!data) {
+                    console.error('missing data')
+                    return
+                }
+
+                this.data = data
+                this.e.recent_image = document.querySelector(this.e.recent_image_selector),
+                this.e.recent_progress = document.querySelector(this.e.recent_progress_selector),
+                this.e.timelapse_nav = document.querySelector(this.e.timelapse_nav_selector),
+                this.e.timelapse_embed = document.querySelector(this.e.timelapse_embed_selector),
+                this.LazyMedia = new LazyMedia()
+
+                this.#update_recent_image_worker()
+                this.#render_timelapse_nav()
+            }
+
+
+            #update_recent_image(continuous=false)
+            {
+                this.e.recent_image.setAttribute('src', this.recent_image_url.replace('{timestamp}', Date.now()))
+            }
+
+
+            #update_recent_image_worker()
+            {
+                this.e.recent_progress.setAttribute('max', this.recent_interval)
+
+                let next_update_on = 0
+
+                setInterval(() => {
+                    this.e.recent_progress.setAttribute('value', String((Date.now() - next_update_on) + this.recent_interval))
+
+                    if (Date.now() >= next_update_on) {
+                        this.#update_recent_image()
+                        next_update_on = Date.now() + this.recent_interval
+                    }
+                }, this.recent_tick)
+            }
+
+
+            #render_timelapse_nav()
+            {
+                const month_keys = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']
+
+                Object.keys(this.data.timelapse).sort().reverse().forEach((year) => {
+                    const e1 = document.createElement('nav')
+                    const e2 = document.createElement('ul')
+                    const e3 = document.createElement('li')
+
+                    e2.append(e3)
+                    e1.append(e2)
+                    this.e.timelapse_nav.append(e1)
+
+                    e3.textContent = year
+
+                    month_keys.forEach((month) => {
+                        const e4 = e3.cloneNode()
+                        const e5 = document.createElement((!this.data.timelapse[year][month]) ? 's' : 'a')
+
+                        e2.append(e4)
+                        e4.append(e5)
+
+                        e5.textContent = month
+
+                        if (this.data.timelapse[year][month]) {
+                            e5.dataset['year'] = year
+                            e5.dataset['month'] = month
+                            e5.dataset['tooltip'] = `${new Date(`${year}-${month}`).toLocaleString('en-US', { month: 'long'})} ${year}`
+
+                            e5.addEventListener('click', (event) => {
+                                this.#render_timelapse_embed(year, month, this.data.timelapse[year][month].dur)
+                            }, false)
+                        }
+                    })
+                })
+            }
+
+
+            #render_timelapse_embed(year, month, dur)
+            {
+                this.e.timelapse_embed.classList.add('hidden')
+                this.e.timelapse_embed.innerHTML = ''
+                this.e.timelapse_embed.textContent = `${year}-${month} · ${new Date(`${year}-${month}`).toLocaleString('en-US', { month: 'long'})} ${year} · ${dur}`
+
+                this.data.timelapse[year][month].urls.forEach((url) => {
+                    const e1 = document.createElement('div')
+
+                    this.e.timelapse_embed.append(e1)
+
+                    e1.classList.add('lazycode')
+
+                    if (url.includes('youtube.com/')) {
+                        e1.textContent = JSON.stringify({
+                            type: 'youtubevideo',
+                            slug: url.split('?v=')[1],
+                        })
+                    }
+                    else if (url.includes('odysee.com/')) {
+                        e1.textContent = JSON.stringify({
+                            type: 'odyseevideo',
+                            slug: url.split('odysee.com/')[1],
+                        })
+                    }
+                    else {
+                        console.warn(`unknown video platform: ${url}`)
+                        e1.textContent = `unknown video platform: ${url}`
+                    }
+                })
+
+                this.LazyMedia.autoembed()
+
+                this.e.timelapse_embed.classList.remove('hidden')
+            }
+        }
+
 
         class LazyMedia {
             // stripped down version
@@ -96,10 +235,10 @@
             videobox_class = 'videobox'
             error_class = 'error'
             slug_template = {
-                twitchstream: 'https://player.twitch.tv/?muted=false&autoplay=false&channel={SLUG}',
-                twitchchat: 'https://twitch.tv/embed/{SLUG}',
+                // twitchstream: 'https://player.twitch.tv/?muted=false&autoplay=false&channel={SLUG}',
+                // twitchchat: 'https://twitch.tv/embed/{SLUG}',
                 youtubevideo: 'https://youtube.com/embed/{SLUG}?modestbranding=1&color=white&rel=0&start=0',
-                youtubeplaylist: 'https://youtube.com/embed/videoseries?list={SLUG}&modestbranding=1&color=white&rel=0',
+                // youtubeplaylist: 'https://youtube.com/embed/videoseries?list={SLUG}&modestbranding=1&color=white&rel=0',
                 odyseevideo: 'https://odysee.com/$/embed/{SLUG}',
             }
             autoembed() {
@@ -125,43 +264,27 @@
             }
             get_baked_element(code) {
                 let baked_element = null
-                if (code.type == 'link') {
-                    code.slug = this.slug_template.link.replace('{SLUG}', code.slug)
-                    baked_element = document.createElement('a')
-                    baked_element.setAttribute('href', code.slug)
-                    this.#add_code_attr(code, baked_element)
-                    this.#add_code_css(code, baked_element)
-                    if (!code.text) {
-                        baked_element.innerHTML = code.slug.replace(/(^\w+:|^)\/\//, '')
-                    }
-                    else {
-                        baked_element.innerHTML = code.text
-                    }
-                    if (code.target) {
-                        baked_element.setAttribute('target', code.target)
-                    }
-                }
-                if (code.type == 'twitchstream') {
-                    code.slug = this.slug_template.twitchstream.replace('{SLUG}', code.slug)
-                    baked_element = document.createElement('div')
-                    baked_element.classList.add(this.videobox_class)
-                    const inner1 = document.createElement('iframe')
-                    inner1.setAttribute('src', code.slug)
-                    inner1.setAttribute('loading', 'lazy')
-                    inner1.setAttribute('allowfullscreen', 'allowfullscreen')
-                    inner1.setAttribute('playsinline', 'playsinline')
-                    this.#add_code_attr(code, inner1)
-                    this.#add_code_css(code, inner1)
-                    baked_element.append(inner1)
-                }
-                if (code.type == 'twitchchat') {
-                    code.slug = this.slug_template.twitchchat.replace('{SLUG}', code.slug)
-                    baked_element = document.createElement('iframe')
-                    baked_element.setAttribute('src', code.slug)
-                    baked_element.setAttribute('loading', 'lazy')
-                    this.#add_code_attr(code, baked_element)
-                    this.#add_code_css(code, baked_element)
-                }
+                // if (code.type == 'twitchstream') {
+                //     code.slug = this.slug_template.twitchstream.replace('{SLUG}', code.slug)
+                //     baked_element = document.createElement('div')
+                //     baked_element.classList.add(this.videobox_class)
+                //     const inner1 = document.createElement('iframe')
+                //     inner1.setAttribute('src', code.slug)
+                //     inner1.setAttribute('loading', 'lazy')
+                //     inner1.setAttribute('allowfullscreen', 'allowfullscreen')
+                //     inner1.setAttribute('playsinline', 'playsinline')
+                //     this.#add_code_attr(code, inner1)
+                //     this.#add_code_css(code, inner1)
+                //     baked_element.append(inner1)
+                // }
+                // if (code.type == 'twitchchat') {
+                //     code.slug = this.slug_template.twitchchat.replace('{SLUG}', code.slug)
+                //     baked_element = document.createElement('iframe')
+                //     baked_element.setAttribute('src', code.slug)
+                //     baked_element.setAttribute('loading', 'lazy')
+                //     this.#add_code_attr(code, baked_element)
+                //     this.#add_code_css(code, baked_element)
+                // }
                 if (code.type == 'youtubevideo') {
                     code.slug = this.slug_template.youtubevideo.replace('{SLUG}', code.slug)
                     if (code.start) {
@@ -178,19 +301,19 @@
                     this.#add_code_css(code, inner1)
                     baked_element.append(inner1)
                 }
-                if (code.type == 'youtubeplaylist') {
-                    code.slug = this.slug_template.youtubeplaylist.replace('{SLUG}', code.slug)
-                    baked_element = document.createElement('div')
-                    baked_element.classList.add(this.videobox_class)
-                    const inner1 = document.createElement('iframe')
-                    inner1.setAttribute('src', code.slug)
-                    inner1.setAttribute('loading', 'lazy')
-                    inner1.setAttribute('allowfullscreen', 'allowfullscreen')
-                    inner1.setAttribute('playsinline', 'playsinline')
-                    this.#add_code_attr(code, inner1)
-                    this.#add_code_css(code, inner1)
-                    baked_element.append(inner1)
-                }
+                // if (code.type == 'youtubeplaylist') {
+                //     code.slug = this.slug_template.youtubeplaylist.replace('{SLUG}', code.slug)
+                //     baked_element = document.createElement('div')
+                //     baked_element.classList.add(this.videobox_class)
+                //     const inner1 = document.createElement('iframe')
+                //     inner1.setAttribute('src', code.slug)
+                //     inner1.setAttribute('loading', 'lazy')
+                //     inner1.setAttribute('allowfullscreen', 'allowfullscreen')
+                //     inner1.setAttribute('playsinline', 'playsinline')
+                //     this.#add_code_attr(code, inner1)
+                //     this.#add_code_css(code, inner1)
+                //     baked_element.append(inner1)
+                // }
                 if (code.type == 'odyseevideo') {
                     code.slug = this.slug_template.odyseevideo.replace('{SLUG}', code.slug)
                     baked_element = document.createElement('div')
@@ -225,119 +348,6 @@
                 }
             }
         }
-
-        const LM = new LazyMedia()
-
-
-        function update_liveview()
-        {
-            const LVUPDINTERVAL = 300_000
-            const LVUPDTICK = 1_000
-
-            const e = {}
-
-            e.lvcd = document.querySelector('progress.lvcd')
-            e.lvcdv = document.querySelector('span.lvcdv')
-            e.lvimg = document.querySelector('img.lvimg')
-            let nextupdon = Date.now() + LVUPDINTERVAL
-
-            e.lvcd.setAttribute('max', String(LVUPDINTERVAL))
-
-            setInterval(() => {
-                e.lvcd.setAttribute('value', String(Math.max(0, nextupdon - Date.now())))
-                e.lvcdv.textContent = String(Math.floor(e.lvcd.getAttribute('value')/1000))
-
-                if (Date.now() >= nextupdon) {
-                    e.lvimg.setAttribute('src', `./latest.jpg?t=${Date.now()}`)
-                    nextupdon = Date.now() + LVUPDINTERVAL
-                }
-            }, LVUPDTICK)
-
-        }
-
-
-        function inc_archive_selection(dt_str)
-        {
-            const e = {}
-
-            e.target = document.querySelector('div.archive-content')
-            e.target.innerHTML = ''
-
-            for (const url of DATA.timelapse[dt_str].urls) {
-
-                e.section = document.createElement('section')
-
-                e.lazycode = document.createElement('div')
-                e.lazycode.classList.add('lazycode')
-
-                e.link = document.createElement('a')
-                e.link.setAttribute('href', url)
-                e.link.setAttribute('target', '_blank')
-                e.link.classList.add('secondary')
-                e.link.textContent = url.split('//')[1]
-
-                if (url.startsWith('https://youtube.com/')) {
-                    e.lazycode.textContent = JSON.stringify({
-                        type: 'youtubevideo',
-                        slug: url.split('?v=')[1],
-                    })
-                }
-
-                if (url.startsWith('https://odysee.com/')) {
-                    e.lazycode.textContent = JSON.stringify({
-                        type: 'odyseevideo',
-                        slug: url.split('odysee.com/')[1],
-                    })
-                }
-
-                e.section.append(e.lazycode)
-                e.section.append(e.link)
-                e.target.append(e.section)
-            }
-
-            LM.autoembed()
-        }
-
-
-        function populate_archive_select()
-        {
-            const e = {}
-
-            e.target = document.querySelector('select.archive-nav')
-
-            e.target.addEventListener('change', (event) => {
-                event.preventDefault()
-                inc_archive_selection(e.target.value)
-            }, false)
-
-            for (const dt_str of Object.keys(DATA.timelapse).sort().reverse()) {
-                const dt = new Date(dt_str)
-                const year = `${dt.getFullYear()}`
-                const month = `${dt.getMonth() + 1}`.padStart(2, '0')
-                const month_name = `${dt.toLocaleString('en-US', { month: 'long'})}`
-
-                e.option = document.createElement('option')
-
-                if (DATA.timelapse[dt_str].urls.length == 0) {
-                    e.option.setAttribute('disabled', 'disabled')
-                }
-                else {
-                    e.option.setAttribute('value', `${dt_str}`)
-                }
-
-                e.option.textContent = `${year} ${month_name} (${DATA.timelapse[dt_str].dur})`
-
-                e.target.append(e.option)
-            }
-        }
-
-
-        window.addEventListener('load', () => {
-            console.log(`skyrecorder <https://sky.etrusci.org>`)
-            update_liveview()
-            populate_archive_select()
-        }, false)
     </script>
-
 </body>
 </html>
