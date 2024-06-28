@@ -12,6 +12,8 @@
             cursor: pointer;
         }
 
+        img, iframe { border-radius: 6px; }
+
         .timelapse_nav ul li:first-child { font-weight: bold; }
 
         .timelapse_nav s { opacity: .3; }
@@ -34,9 +36,11 @@
             margin: 0;
         }
 
-        img, iframe { border-radius: 6px; }
-
         .hidden { display: none; }
+
+        header p {
+            text-align: right;
+        }
 
         footer {
             text-align: right;
@@ -55,22 +59,25 @@
     <header class="container">
         <div class="grid">
             <h1>skyrecorder</h1>
-            <p>
-                New setup currently in test phase until end of June 2024.
-            </p>
+            <p>New setup currently in test phase until end of June 2024.</p>
         </div>
     </header>
 
 
     <main class="container">
         <article>
-            <h2>recent view</h2>
-            <img class="recent"><br>
-            <progress class="recent"></progress>
+            <hgroup>
+                <h2>recent view</h2>
+                <p>image will update automatically.</p>
+            </hgroup>
+            <img class="recent" src="./latest.jpg">
         </article>
 
         <article>
-            <h2>timelapse archive</h2>
+            <hgroup>
+                <h2>timelapse archive</h2>
+                <p>monthly timelapses of the sky.</p>
+            </hgroup>
             <div class="timelapse_nav"></div>
             <div class="timelapse_embed hidden"></div>
         </article>
@@ -97,7 +104,6 @@
             LazyMedia
             e = {
                 recent_image_selector: 'img.recent',
-                recent_progress_selector: 'progress.recent',
                 timelapse_nav_selector: 'div.timelapse_nav',
                 timelapse_embed_selector: 'div.timelapse_embed',
                 recent_image: null,
@@ -105,8 +111,8 @@
                 timelapse_embed: null,
             }
             recent_image_url = './latest.jpg?t={timestamp}'
-            recent_interval = 1_800_000
-            recent_tick = 1_000
+            recent_interval = 600_000
+            recent_tick = 5_000
 
 
             constructor(data)
@@ -120,35 +126,43 @@
 
                 this.data = data
                 this.e.recent_image = document.querySelector(this.e.recent_image_selector),
-                this.e.recent_progress = document.querySelector(this.e.recent_progress_selector),
                 this.e.timelapse_nav = document.querySelector(this.e.timelapse_nav_selector),
                 this.e.timelapse_embed = document.querySelector(this.e.timelapse_embed_selector),
                 this.LazyMedia = new LazyMedia()
 
-                this.#update_recent_image_worker()
+                this.#autoupdate_recent_image()
                 this.#render_timelapse_nav()
             }
 
 
-            #update_recent_image(continuous=false)
+            #update_recent_image()
             {
                 this.e.recent_image.setAttribute('src', this.recent_image_url.replace('{timestamp}', Date.now()))
             }
 
 
-            #update_recent_image_worker()
+            #autoupdate_recent_image()
             {
-                this.e.recent_progress.setAttribute('max', this.recent_interval)
-
                 let next_update_on = 0
+                let prev_etag = ''
 
                 setInterval(() => {
-                    this.e.recent_progress.setAttribute('value', String((Date.now() - next_update_on) + this.recent_interval))
-
                     if (Date.now() >= next_update_on) {
-                        this.#update_recent_image()
-                        next_update_on = Date.now() + this.recent_interval
+                        fetch(this.recent_image_url.split('?')[0], { method: 'HEAD' })
+                        .then(r => {
+                            let etag = r.headers.get('etag')
+
+                            if (etag != prev_etag) {
+                                this.#update_recent_image()
+                                next_update_on = Date.now() + this.recent_interval
+                                prev_etag = etag
+                            }
+                            else {
+                                next_update_on = Date.now() + this.recent_interval
+                            }
+                        })
                     }
+
                 }, this.recent_tick)
             }
 
@@ -180,7 +194,7 @@
                         if (this.data.timelapse[year][month]) {
                             e5.dataset['year'] = year
                             e5.dataset['month'] = month
-                            e5.dataset['tooltip'] = `${new Date(`${year}-${month}`).toLocaleString('en-US', { month: 'long'})} ${year}`
+                            e5.dataset['tooltip'] = `${this.#get_month_name(year, month)} ${year}`
 
                             e5.addEventListener('click', (event) => {
                                 this.#render_timelapse_embed(year, month, this.data.timelapse[year][month].dur)
@@ -195,7 +209,7 @@
             {
                 this.e.timelapse_embed.classList.add('hidden')
                 this.e.timelapse_embed.innerHTML = ''
-                this.e.timelapse_embed.textContent = `${year}-${month} · ${new Date(`${year}-${month}`).toLocaleString('en-US', { month: 'long'})} ${year} · ${dur}`
+                this.e.timelapse_embed.textContent = `${year}-${month} · ${this.#get_month_name(year, month)} ${year} · ${dur}`
 
                 this.data.timelapse[year][month].urls.forEach((url) => {
                     const e1 = document.createElement('div')
@@ -225,6 +239,12 @@
                 this.LazyMedia.autoembed()
 
                 this.e.timelapse_embed.classList.remove('hidden')
+            }
+
+
+            #get_month_name(year, month, locale='en-US', format='long')
+            {
+                return new Date(`${year}-${month}`).toLocaleString(locale, { month: format})
             }
         }
 
