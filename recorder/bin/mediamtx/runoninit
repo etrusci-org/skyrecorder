@@ -20,6 +20,6 @@ ffmpeg \
     -pix_fmt $PIX_FMT \
     -preset ultrafast \
     -b:v 600k \
-    -vf "drawtext=text='skyrecorder\ %{localtime\:%F\ %T}':fontcolor=white@0.5:fontsize=12:x=w-text_w-5:y=h-text_h-5" \
+    -vf "drawtext=text='SKYRECORDER\ · sky.etrusci.org · %{localtime\:%F\ %T}':fontcolor=white@0.5:fontsize=12:x=w-text_w-5:y=h-text_h-5" \
     -f rtsp \
     rtsp://${SRV_HOST}:${RTSP_PORT}/${MTX_PATH}

@@ -693,11 +693,11 @@ paths:
   #   source: rtsp://my_camera
 
   skyrecorder:
-    maxReaders: 2
+    maxReaders: 1
     record: yes
     recordPath: ./rec/%Y-%m-%d_%H-%M-%S
     recordFormat: fmp4
-    recordPartDuration: 60s
+    recordPartDuration: 5m
     recordSegmentDuration: 30m
     recordDeleteAfter: 96h
     overridePublisher: no
