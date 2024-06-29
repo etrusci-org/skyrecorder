@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+sudo -v
+
+sudo apt update
+
+sudo apt install \
+    bash \
+    curl \
+    ffmpeg \
+    inotify-tools \
+    openssh-client \
+    openssh-server \
+    rsync \
+    screen
