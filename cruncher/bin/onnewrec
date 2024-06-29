@@ -9,6 +9,7 @@ APP_DIR=$(realpath ${BIN_DIR}/..)
 REC_DIR=${APP_DIR}/rec
 THUMB_DIR=${APP_DIR}/rec-thumb
 LATEST_THUMB_REMOTE_DEST=art2_skyrecorder@ssh.nyc1.nearlyfreespeech.net:/home/public/latest.jpg
+PUSH_NOTIFICATION_URL=
 
 
 #=== MAGIC
@@ -17,16 +18,10 @@ inotifywait --monitor --format '%w%f' --event moved_to ${REC_DIR} |
 while read -r f
 do
     echo "new recording: ${f}"
-
     echo "extracting recording thumb ..."
 
     THUMB_FILE=${THUMB_DIR}/$(basename $f).jpg
 
-    # ffmpeg -loglevel warning -stats \
-    #     -i $f \
-    #     -frames:v 1 \
-    #     -q:v 1 \
-    #     $THUMB_FILE
     ffmpeg -loglevel warning -stats \
         -sseof -1 \
         -i $f \
@@ -39,5 +34,10 @@ do
         echo "wrote $(stat -c %s $THUMB_FILE) bytes to $(basename $THUMB_FILE)"
         echo "uploading thumb to remote server ..."
         scp $THUMB_FILE $LATEST_THUMB_REMOTE_DEST
+    fi
+
+    if [ "$PUSH_NOTIFICATION_URL" != "" ]
+    then
+        curl -o /dev/null -s "${PUSH_NOTIFICATION_URL}"
     fi
 done

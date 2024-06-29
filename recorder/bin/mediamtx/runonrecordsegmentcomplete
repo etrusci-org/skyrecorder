@@ -3,6 +3,7 @@
 #=== CONF
 
 RSYNC_DEST=elity:/mnt/stor1/skyrecorder/rec/
+PUSH_NOTIFICATION_URL=
 
 
 #=== MAGIC
@@ -13,3 +14,9 @@ rsync \
     --compress \
     --times \
     ./rec/*.mp4 $RSYNC_DEST
+
+
+if [ "$PUSH_NOTIFICATION_URL" != "" ]
+then
+    curl -o /dev/null -s "${PUSH_NOTIFICATION_URL}"
+fi
