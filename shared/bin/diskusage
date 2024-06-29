@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+
+#=== CONF
+
+ALERT_ON_PERCENT=50
+PUSH_NOTIFICATION_URL=
+
+
+#=== MAGIC
+
+DISK_PATH=$1
+
+# fields:
+#     1 filesystem
+#     2 size
+#     3 used
+#     4 available
+#     5 used %
+OUTPUT_FIELDS=5
+
+if [ "$2" != "" ]
+then
+    OUTPUT_FIELDS=$2
+fi
+
+df --local --human-readable $DISK_PATH |
+tail -n 1 |
+xargs |
+cut -d ' ' -f $OUTPUT_FIELDS |
+while read -r v
+do
+    echo "$v"
+
+    if (( $(echo $v | cut -d '%' -f 1) > $ALERT_ON_PERCENT ))
+    then
+        echo "usage limit (${ALERT_ON_PERCENT}%) reached: ${v}"
+
+        if [ "$PUSH_NOTIFICATION_URL" != "" ]
+        then
+            curl -o /dev/null -s "${PUSH_NOTIFICATION_URL}"
+        fi
+    fi
+done
