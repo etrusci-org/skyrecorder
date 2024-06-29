@@ -148,18 +148,16 @@
 
                 setInterval(() => {
                     if (Date.now() >= next_update_on) {
-                        fetch(this.recent_image_url.split('?')[0], { method: 'HEAD' })
+                        fetch(this.e.recent_image.getAttribute('src'), { method: 'HEAD' })
                         .then(r => {
                             let etag = r.headers.get('etag')
 
                             if (etag != prev_etag) {
                                 this.#update_recent_image()
-                                next_update_on = Date.now() + this.recent_interval
                                 prev_etag = etag
                             }
-                            else {
-                                next_update_on = Date.now() + this.recent_interval
-                            }
+
+                            next_update_on = Date.now() + this.recent_interval
                         })
                     }
 
