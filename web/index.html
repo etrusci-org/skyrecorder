@@ -152,6 +152,10 @@
                         .then(r => {
                             let etag = r.headers.get('etag')
 
+                            // IDEA: detect if etag didn't change for 2*recent_interval and load an alternative picture
+                            // e.g. during maintenance or so this could be informative for those who are waiting for an
+                            // updated image on the website
+
                             if (etag != prev_etag) {
                                 this.#update_recent_image()
                                 prev_etag = etag
