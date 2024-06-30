@@ -2,40 +2,44 @@
 
 #=== CONF
 
-ALERT_ON_PERCENT=50
-# cruncher # PUSH_NOTIFICATION_URL="http://elity:3001/api/push/aenFlP7964?status=up&msg=HIGH_USAGE&ping="
-# recorder # PUSH_NOTIFICATION_URL="http://elity:3001/api/push/DDIDYIvpp9?status=up&msg=HIGH_USAGE&ping="
-PUSH_NOTIFICATION_URL=
+ALERT_ABOVE_PERCENT=50
+
+# recorder       PUSH_NOTIFICATION_URL: http://elity:3001/api/push/DDIDYIvpp9?status=up&msg=HIGH_USAGE&ping=
+# cruncher stor1 PUSH_NOTIFICATION_URL: http://elity:3001/api/push/aenFlP7964?status=up&msg=HIGH_USAGE&ping=
+# cruncher os    PUSH_NOTIFICATION_URL: http://elity:3001/api/push/zmPSkWkIq8?status=up&msg=HIGH_USAGE&ping=
 
 
 #=== MAGIC
 
-DISK_PATH=$1
+if (( $# == 0 ))
+then
+    echo 'usage: diskusage <PATH> [PUSH_NOTIFICATION_URL]'
+    echo 'examples:'
+    echo '> diskusage /home'
+    echo '> diskusage /home "http://elity:3001/api/push/ABCDEF?status=up&msg=HIGH_USAGE&ping="'
+    exit 1
+fi
 
-# fields:
-#     1 filesystem
-#     2 size
-#     3 used
-#     4 available
-#     5 used %
-OUTPUT_FIELDS=5
+
+DISK_PATH="$1"
 
 if [ "$2" != "" ]
 then
-    OUTPUT_FIELDS=$2
+    PUSH_NOTIFICATION_URL="$2"
 fi
+
 
 df --local --human-readable $DISK_PATH |
 tail -n 1 |
 xargs |
-cut -d ' ' -f $OUTPUT_FIELDS |
+cut -d ' ' -f 5 |
 while read -r v
 do
     echo "$v"
 
-    if (( $(echo $v | cut -d '%' -f 1) > $ALERT_ON_PERCENT ))
+    if (( $(echo $v | cut -d '%' -f 1) > $ALERT_ABOVE_PERCENT ))
     then
-        echo "usage limit (${ALERT_ON_PERCENT}%) reached: ${v}"
+        echo "high disk usage! current: ${v}, limit: ${ALERT_ABOVE_PERCENT}%"
 
         if [ "$PUSH_NOTIFICATION_URL" != "" ]
         then
