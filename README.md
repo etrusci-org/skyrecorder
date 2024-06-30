@@ -35,3 +35,17 @@ Setup passwordless keyauth ssh connection between both recorder and cruncher.
 
 Add job to crontab on cruncher to run cruncher/bin/procrec yesterday every night at 0300 or so.
 -->
+
+<!-- 
+## Network Setup
+
+Nothing should be exposed to the internet. Only the **cruncher** needs outgoing internet access to upload the latest view to the web.
+
+**cruncher**:
+- hostname: elity
+- ip: 192.168.13.111
+
+**recorder**:
+- hostname: studiopi
+- ip: 192.168.13.117
+-->
