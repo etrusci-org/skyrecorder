@@ -1,15 +1,42 @@
 #!/usr/bin/env bash
 
-sudo -v
+#=== CONF
 
+CRUNCHER_DEPS="bash curl ffmpeg openssh-client openssh-server rsync screen inotify-tools docker.io"
+RECORDER_DEPS="bash curl ffmpeg openssh-client openssh-server rsync screen"
+
+
+#=== MAGIC
+
+echo "where are we right now?"
+echo "[1] cruncher"
+echo "[2] recorder"
+read -p "choose a number: " DEVICE
+echo "installing dependencies for [${DEVICE}] ..."
+
+sudo -v
 sudo apt update
 
-sudo apt install \
-    bash \
-    curl \
-    ffmpeg \
-    inotify-tools \
-    openssh-client \
-    openssh-server \
-    rsync \
-    screen
+# cruncher
+if [ "$DEVICE" == "1" ]
+then
+    sudo apt install $CRUNCHER_DEPS
+
+    if [ "$(docker ps | grep uptime-kuma)" != "" ]
+    then
+        echo "uptime-kuma is already running."
+    else
+        echo "adding $USER to docker group ..."
+        sudo usermod -aG docker $USER
+        echo "enter the password for $USER to make group changes active ..."
+        su - $USER
+        echo "installing and starting uptime-kuma ..."
+        docker run -d --restart=always -p 3001:3001 -v uptime-kuma:/app/data --name uptime-kuma louislam/uptime-kuma:1
+    fi
+fi
+
+# recorder
+if [ "$DEVICE" == "2" ]
+then
+    sudo apt install $RECORDER_DEPS
+fi
