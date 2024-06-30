@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en-US">
+<html lang="en-US" data-theme="light">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -36,19 +36,34 @@
             margin: 0;
         }
 
+        .theme-toggle {
+            height: 40px;
+            width: 40px;
+            cursor: pointer;
+        }
+
+        .theme-toggle.sun {
+            content: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBIWXMAAAsTAAALEwEAmpwYAAAB2UlEQVR4nO2Zy0rDQBRAD8XUWgRRjLhQP0lrkf6Stf6FVv0O26VQrQutj4JrN+IbFIwM3EIMrTbJZDKWOXA3aZKb09vO4wYcDkfeHAMnTACBxL8ncCKWYV1FFoCSQREPmCcDiVegC/gGRHzgFHgE5tDINHAmD3QeU6YNtGKc70uOQHKqymglnOASWNadgJ85LjLKkbmMMYlRpU8yAEQppfjppsKXxG9DkhaBGnAI9IAXiZ4cq8k5YZaAd7mnMYnwt7gYOVYF+qGRalTcApuRa9W9dFQ3FQWgMYZANHbkWmvYTSAxiDqWUE0hMYhK3hJF+b2nFekPGQCMUtMgMYgtcuRIo0gzT5FrjSJqntHGLHD3SzK1AAzzpFFE3Svpc8QWaVki0kIzVxpF1CI0Nw40iuzlKTIxw68H3EzChIisYtNIfAHrWEIjhcg2FlGQJXncStRtWMZPAeXIscqY/xm1ItiIXKvaPto7Jn+htqMd4H7Irs6TEagpc8OzhGoo7Mtn0QdWE+CD6a1uuPnQkcqkxZOGXGCq+ZBly8ZE38xY38nPWqYsfd8kpY/7xsoPyaicM2hkFfg03MTuAh/ACppZM/xaoSQ5rSGpiHU4EduYmIq0s9hjOxwOYvEN8/+wasFeRkQAAAAASUVORK5CYII=');
+            background-color: #dadada;
+        }
+
+        .theme-toggle.moon {
+            content: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBIWXMAAAsTAAALEwEAmpwYAAACgklEQVR4nO2aPWsUQRjHfxFUjOSaGLTKQbp8AP0EYiWeFtFrDIlNsMgXsEgQbAJa3CeIqEgknagEIqiFED+AeWmSoIj4gmgRMBodeeApzmN3Z2Zv93ZG84On2tln9387M8/Mfw72+T9ZAnaATeA50ALGgeNExjJgEuIX8AqYAgaIgANAA3iWIkjiGzAL1IiEM8BWhqAPQJNIOArMZ4gxwGIs3a0PuG4RswqMEAkzFjHvgFEi+TILFjHvgToR0A9sW8S8jmVGu2ARInGHSHjhIGaMCLjkIOStTt9Bc0gLok3MNSLgvoMQEXuEwLnqIETiCoFz0lHIUwKn7ihkDxgk8OJoHOM8AXPYQ8gtAmbIQ8hj/oHBboANAmbCQ8hnAua2h5DdNMtmWY2CqjgIfPQQ8j0pyY5eFLejKhoeIiQ+JSXZ1Iti2VTFS08ha7a9gFg2veacpwiJh0mJWm0Ntnq85q9ZvC6TEnNJyS53NJpXY6Bs5BkPcogwwNmkhCfUi21vKL5T2dzIKeJHlhmxknDDTElfpq8LEQZ4lJV8KuWmBV2VFkWti+5kNDL9YfFav6bcuK2WTRGzU56Bbdrije7vM5m1JJFp+qJLoo6K3chRJ0xKTLt+dhcnQ9rc0z32KWBYu58IPKar2AldO/ksO4wl1nXP4kSzwAcXGb+B03iyGMCLm46Qou3NgJ5PmEBixXNc/sWInk9ULWJDt8BdMarnE1WKqFMQdT2fqKI7DVEwMi3f7eHs1OpmTLgwppW1LBHreabYvPSrte9SOF1Dfpxpn2JXJGLtT6qhvJfj5X/qKrZZdjfyYVAXlTeBJ9pFvqhls6se1KpuT+d0UxTFHwL2IQd/AL1n87a26ZoXAAAAAElFTkSuQmCC');
+            background-color: #656565;
+        }
+
         .hidden { display: none; }
 
-        header p {
-            text-align: right;
-        }
+        header div.grid div:nth-child(2) { text-align: right; }
 
         footer {
             text-align: right;
             margin-top: 100vh;
         }
+
     </style>
 
-    <title>skyrecorder</title>
+    <title>SKYRECORDER</title>
 </head>
 <body>
     <noscript>
@@ -58,9 +73,10 @@
 
     <header class="container">
         <div class="grid">
-            <h1>skyrecorder</h1>
-            <p>New setup currently in test phase until end of June 2024.</p>
+            <div><h1>SKYRECORDER</h1></div>
+            <div><img class="theme-toggle sun"></div>
         </div>
+        <p>New setup currently in test phase until end of June 2024.</p>
     </header>
 
 
@@ -68,7 +84,7 @@
         <article>
             <hgroup>
                 <h2>recent view</h2>
-                <p>image will update automatically.</p>
+                <p>image last updated <span class="recent timestamp">?</span>s ago.</p>
             </hgroup>
             <img class="recent" src="./latest.jpg">
         </article>
@@ -81,11 +97,42 @@
             <div class="timelapse_nav"></div>
             <div class="timelapse_embed hidden"></div>
         </article>
+
+        <article>
+            <hgroup>
+                <h2>setup</h2>
+                <p>professionalol.</p>
+            </hgroup>
+            <section>
+                <strong>recorder:</strong>
+                <ul>
+                    <li>Raspberry Pi 4 Model B 4GB (Rev 1.1)</li>
+                    <li>Logitech C920 HD Pro Webcam</li>
+                </ul>
+                <div class="grid">
+                    <a href="./setup-1.jpg" target="_blank" data-tooltip="recorder computer"><img src="./setup-1.jpg" loading="lazy"></a>
+                    <a href="./setup-2.jpg" target="_blank" data-tooltip="recorder camera"><img src="./setup-2.jpg" loading="lazy"></a>
+                    <a href="./setup-3.jpg" target="_blank" data-tooltip="recorder camera"><img src="./setup-3.jpg" loading="lazy"></a>
+                </div>
+            </section>
+            <section>
+                <strong>cruncher:</strong>
+                <ul>
+                    <li>HP EliteDesk 705 G1 DM</li>
+                    <li>Western Digital Elements 1 TB External Hard Drive</li>
+                </ul>
+                <a href="./setup-4.jpg" target="_blank" data-tooltip="cruncher computer (right) + external storage (left)"><img src="./setup-4.jpg" loading="lazy"></a>
+            </section>
+            <section>
+                <strong>code repository:</strong>
+                <p>May be published too at some point in the future.</p>
+            </section>
+        </article>
     </main>
 
 
     <footer class="container">
-        skyrecorder &copy; 2024 <a href="https://etrusci.org" target="_blank" data-tooltip="etrusci.org">arT2</a>
+        <p>skyrecorder &copy; 2024 <a href="https://etrusci.org" target="_blank" data-tooltip="etrusci.org">arT2</a></p>
     </footer>
 
 
@@ -104,15 +151,20 @@
             LazyMedia
             e = {
                 recent_image_selector: 'img.recent',
+                recent_timestamp_selector: 'span.recent.timestamp',
                 timelapse_nav_selector: 'div.timelapse_nav',
                 timelapse_embed_selector: 'div.timelapse_embed',
+                theme_toggle_selector: 'img.theme-toggle',
                 recent_image: null,
+                recent_timestamp: null,
                 timelapse_nav: null,
                 timelapse_embed: null,
+                theme_toggle: null,
             }
             recent_image_url = './latest.jpg?t={timestamp}'
-            recent_interval = 600_000
-            recent_tick = 5_000
+            recent_interval = 10_000
+            recent_tick = 1_000
+            theme = 'light'
 
 
             constructor(data)
@@ -126,9 +178,24 @@
 
                 this.data = data
                 this.e.recent_image = document.querySelector(this.e.recent_image_selector),
+                this.e.recent_timestamp = document.querySelector(this.e.recent_timestamp_selector),
                 this.e.timelapse_nav = document.querySelector(this.e.timelapse_nav_selector),
                 this.e.timelapse_embed = document.querySelector(this.e.timelapse_embed_selector),
+                this.e.theme_toggle = document.querySelector(this.e.theme_toggle_selector),
                 this.LazyMedia = new LazyMedia()
+
+                this.e.theme_toggle.addEventListener('click', () => {
+                    if (this.theme == 'light') {
+                        this.theme = 'dark'
+                        this.e.theme_toggle.classList.replace('sun', 'moon')
+                    }
+                    else {
+                        this.theme = 'light'
+                        this.e.theme_toggle.classList.replace('moon', 'sun')
+                    }
+                    document.querySelector('html').dataset.theme = this.theme
+
+                }, false)
 
                 this.#autoupdate_recent_image()
                 this.#render_timelapse_nav()
@@ -143,7 +210,8 @@
 
             #autoupdate_recent_image()
             {
-                let next_update_on = 0
+                let next_update_on = Date.now()
+                let last_update_on = Date.now()
                 let prev_etag = ''
 
                 setInterval(() => {
@@ -151,20 +219,15 @@
                         fetch(this.e.recent_image.getAttribute('src'), { method: 'HEAD' })
                         .then(r => {
                             let etag = r.headers.get('etag')
-
-                            // IDEA: detect if etag didn't change for 2*recent_interval and load an alternative picture
-                            // e.g. during maintenance or so this could be informative for those who are waiting for an
-                            // updated image on the website
-
                             if (etag != prev_etag) {
                                 this.#update_recent_image()
+                                last_update_on = Date.now()
                                 prev_etag = etag
                             }
-
                             next_update_on = Date.now() + this.recent_interval
                         })
                     }
-
+                    this.e.recent_timestamp.textContent = ((Date.now() - last_update_on) / 1000).toFixed(0)
                 }, this.recent_tick)
             }
 
