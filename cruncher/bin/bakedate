@@ -8,7 +8,7 @@ APP_DIR=$(realpath ${BIN_DIR}/..)
 
 REC_DIR=${APP_DIR}/rec
 DAILY_DIR=${APP_DIR}/rec-daily
-PUSH_NOTIFICATION_URL=
+PUSH_NOTIFICATION_URL="http://elity:3001/api/push/61yIEdRd5b?status=up&msg=SCRIPT_DONE&ping="
 
 
 #=== MAGIC

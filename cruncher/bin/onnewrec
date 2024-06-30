@@ -9,7 +9,7 @@ APP_DIR=$(realpath ${BIN_DIR}/..)
 REC_DIR=${APP_DIR}/rec
 THUMB_DIR=${APP_DIR}/rec-thumb
 LATEST_THUMB_REMOTE_DEST=art2_skyrecorder@ssh.nyc1.nearlyfreespeech.net:/home/public/latest.jpg
-PUSH_NOTIFICATION_URL=
+PUSH_NOTIFICATION_URL="http://elity:3001/api/push/0tn3dQTYGI?status=up&msg=SCRIPT_DONE&ping="
 
 
 #=== MAGIC

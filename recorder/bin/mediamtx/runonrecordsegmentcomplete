@@ -3,7 +3,7 @@
 #=== CONF
 
 RSYNC_DEST=elity:/mnt/stor1/skyrecorder/rec/
-PUSH_NOTIFICATION_URL=
+PUSH_NOTIFICATION_URL="http://elity:3001/api/push/XJ9pGsbfKE?status=up&msg=SCRIPT_DONE&ping="
 
 
 #=== MAGIC

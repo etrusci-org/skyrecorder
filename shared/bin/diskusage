@@ -3,6 +3,8 @@
 #=== CONF
 
 ALERT_ON_PERCENT=50
+# cruncher # PUSH_NOTIFICATION_URL="http://elity:3001/api/push/aenFlP7964?status=up&msg=HIGH_USAGE&ping="
+# recorder # PUSH_NOTIFICATION_URL="http://elity:3001/api/push/DDIDYIvpp9?status=up&msg=HIGH_USAGE&ping="
 PUSH_NOTIFICATION_URL=
 
 
