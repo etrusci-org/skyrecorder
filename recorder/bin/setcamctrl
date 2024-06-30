@@ -30,7 +30,7 @@ then
 fi
 
 echo "> BRIGHTNESS"
-v4l2-ctl --device $DEVICE_PATH --set-ctrl brightness=130
+v4l2-ctl --device $DEVICE_PATH --set-ctrl brightness=128
 sleep 2s
 
 echo "> CONTRAST"
@@ -38,7 +38,7 @@ v4l2-ctl --device $DEVICE_PATH --set-ctrl contrast=135
 sleep 2s
 
 echo "> SATURATION"
-v4l2-ctl --device $DEVICE_PATH --set-ctrl saturation=133
+v4l2-ctl --device $DEVICE_PATH --set-ctrl saturation=135
 sleep 2s
 
 echo "> SHARPNESS"
