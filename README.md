@@ -1,10 +1,14 @@
 # skyrecorder
 
-This is the continuation of my skyrecorder project that was put on ice in 2019.
+This is the continuation of what was put on ice in 2019. Everything was redone from scratch.
 
-Work in progress.
+The main purpose is to record the sky and create monthly timelapses with as little work as possible. All\* I have to do is to copy the daily videos of the previous month, cut out the nights, speed up the scene, and upload it to the interwebs ;)
 
+\* = still need to delete old/unused files from time to time *(but i'll automate that too probably)*
 
+Checkout the [website](https://sky.etrusci.org) for the latest view and some more extra info.
+
+I'll extend this documentation soon with more technical information.
 
 <!--
 ## Hardware
