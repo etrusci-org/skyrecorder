@@ -1,66 +1,90 @@
 <!DOCTYPE html>
-<html lang="en-US" data-theme="light">
+<html lang="en-US">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="application-name" content="skyrecorder">
-    <meta name="color-scheme" content="light dark">
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.slate.min.css">
     <style>
-        a {
-            cursor: pointer;
-        }
-
-        img, iframe { border-radius: 6px; }
-
-        .timelapse_nav ul li:first-child { font-weight: bold; }
-
-        .timelapse_nav s { opacity: .3; }
-
-        .videobox {
-            position: relative;
-            padding-top: 56.25%;
-            overflow: hidden;
-            width: 1920px;
-            max-width: 100%;
-        }
-
-        .videobox iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            max-height: 100%;
+        /* layout ------------------------------------------------ */
+        html, body, noscript, div, header, main, nav, footer, p,
+        span, strong, a, h1, h2, img, iframe, ul, li, s, a {
             margin: 0;
+            padding: 0;
+            border: 0;
+            box-sizing: border-box;
+            font-size: inherit;
+            font-style: normal;
+            font-weight: 400;
+            line-height: 1.5;
         }
 
-        .theme-toggle {
-            height: 40px;
-            width: 40px;
+        body {
+            font-family: sans-serif;
+            font-size: 100%;
+            padding: 0 2rem;
+        }
+
+        strong { font-weight: 700; }
+
+        header, main, nav, footer, iframe { display: block; }
+
+        h1, h2 {
+            font-weight: 100;
+            letter-spacing: 5px;
+        }
+        h1 { font-size: 175%; }
+        h2 { font-size: 150%; }
+
+        p { margin-bottom: 1rem; }
+
+        a {
+            text-decoration-line: underline;
             cursor: pointer;
         }
 
-        .theme-toggle.sun {
-            content: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBIWXMAAAsTAAALEwEAmpwYAAAB2UlEQVR4nO2Zy0rDQBRAD8XUWgRRjLhQP0lrkf6Stf6FVv0O26VQrQutj4JrN+IbFIwM3EIMrTbJZDKWOXA3aZKb09vO4wYcDkfeHAMnTACBxL8ncCKWYV1FFoCSQREPmCcDiVegC/gGRHzgFHgE5tDINHAmD3QeU6YNtGKc70uOQHKqymglnOASWNadgJ85LjLKkbmMMYlRpU8yAEQppfjppsKXxG9DkhaBGnAI9IAXiZ4cq8k5YZaAd7mnMYnwt7gYOVYF+qGRalTcApuRa9W9dFQ3FQWgMYZANHbkWmvYTSAxiDqWUE0hMYhK3hJF+b2nFekPGQCMUtMgMYgtcuRIo0gzT5FrjSJqntHGLHD3SzK1AAzzpFFE3Svpc8QWaVki0kIzVxpF1CI0Nw40iuzlKTIxw68H3EzChIisYtNIfAHrWEIjhcg2FlGQJXncStRtWMZPAeXIscqY/xm1ItiIXKvaPto7Jn+htqMd4H7Irs6TEagpc8OzhGoo7Mtn0QdWE+CD6a1uuPnQkcqkxZOGXGCq+ZBly8ZE38xY38nPWqYsfd8kpY/7xsoPyaicM2hkFfg03MTuAh/ACppZM/xaoSQ5rSGpiHU4EduYmIq0s9hjOxwOYvEN8/+wasFeRkQAAAAASUVORK5CYII=');
-            background-color: #dadada;
+        a:link, a:visited {
+            text-decoration-style: dashed;
         }
 
-        .theme-toggle.moon {
-            content: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBIWXMAAAsTAAALEwEAmpwYAAACgklEQVR4nO2aPWsUQRjHfxFUjOSaGLTKQbp8AP0EYiWeFtFrDIlNsMgXsEgQbAJa3CeIqEgknagEIqiFED+AeWmSoIj4gmgRMBodeeApzmN3Z2Zv93ZG84On2tln9387M8/Mfw72+T9ZAnaATeA50ALGgeNExjJgEuIX8AqYAgaIgANAA3iWIkjiGzAL1IiEM8BWhqAPQJNIOArMZ4gxwGIs3a0PuG4RswqMEAkzFjHvgFEi+TILFjHvgToR0A9sW8S8jmVGu2ARInGHSHjhIGaMCLjkIOStTt9Bc0gLok3MNSLgvoMQEXuEwLnqIETiCoFz0lHIUwKn7ihkDxgk8OJoHOM8AXPYQ8gtAmbIQ8hj/oHBboANAmbCQ8hnAua2h5DdNMtmWY2CqjgIfPQQ8j0pyY5eFLejKhoeIiQ+JSXZ1Iti2VTFS08ha7a9gFg2veacpwiJh0mJWm0Ntnq85q9ZvC6TEnNJyS53NJpXY6Bs5BkPcogwwNmkhCfUi21vKL5T2dzIKeJHlhmxknDDTElfpq8LEQZ4lJV8KuWmBV2VFkWti+5kNDL9YfFav6bcuK2WTRGzU56Bbdrije7vM5m1JJFp+qJLoo6K3chRJ0xKTLt+dhcnQ9rc0z32KWBYu58IPKar2AldO/ksO4wl1nXP4kSzwAcXGb+B03iyGMCLm46Qou3NgJ5PmEBixXNc/sWInk9ULWJDt8BdMarnE1WKqFMQdT2fqKI7DVEwMi3f7eHs1OpmTLgwppW1LBHreabYvPSrte9SOF1Dfpxpn2JXJGLtT6qhvJfj5X/qKrZZdjfyYVAXlTeBJ9pFvqhls6se1KpuT+d0UxTFHwL2IQd/AL1n87a26ZoXAAAAAElFTkSuQmCC');
-            background-color: #656565;
+        a:hover, a:focus, a:active {
+            font-weight: 700;
+            text-decoration-style: solid;
         }
 
-        .hidden { display: none; }
+        img {
+            display: inline-block;
+            max-width: 100%;
+            height: auto;
+            border-radius: 6px;
+            border-width: 1px;
+            border-style: solid;
+        }
 
-        header div.grid div:nth-child(2) { text-align: right; }
-
+        header, main, footer { padding: 4rem 0; }
+        header, footer { text-align: center; }
+        main {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
         footer {
-            text-align: right;
-            margin-top: 100vh;
+            margin: 100vh 0 4rem 0;
         }
 
+        /* .hidden { display: none; } */
+
+        /* color ------------------------------------------------- */
+        .good { color: #009e00; }
+        .bad { color: #ff6200; }
+
+        body {
+            color: #000000;
+            background-color: #ffffff;
+        }
+
+        img {
+            border-color: #000000;
+        }
     </style>
 
     <title>SKYRECORDER</title>
@@ -71,368 +95,32 @@
         Here are <a href="https://www.enable-javascript.com/">instructions how to enable JavaScript in your web browser</a>.
     </noscript>
 
-    <header class="container">
-        <div class="grid">
-            <div><h1>SKYRECORDER</h1></div>
-            <div><img class="theme-toggle sun"></div>
-        </div>
-        <p>New setup currently in test phase until end of June 2024.</p>
+    <header>
+        <h1>SKYRECORDER</h1>
     </header>
 
-
-    <main class="container">
-        <article>
-            <hgroup>
-                <h2>recent view</h2>
-                <p>image last updated <span class="recent timestamp">?</span>s ago.</p>
-            </hgroup>
-            <img class="recent" src="./latest.jpg">
-        </article>
-
-        <article>
-            <hgroup>
-                <h2>timelapse archive</h2>
-                <p>monthly timelapses of the sky.</p>
-            </hgroup>
-            <div class="timelapse_nav"></div>
-            <div class="timelapse_embed hidden"></div>
-        </article>
-
-        <article>
-            <hgroup>
-                <h2>setup</h2>
-                <p>professionalol.</p>
-            </hgroup>
-            <section>
-                <strong>recorder:</strong>
-                <ul>
-                    <li>Raspberry Pi 4 Model B 4GB (Rev 1.1)</li>
-                    <li>Logitech C920 HD Pro Webcam</li>
-                </ul>
-                <div class="grid">
-                    <a href="./setup-1.jpg" target="_blank" data-tooltip="recorder computer"><img src="./setup-1.jpg" loading="lazy"></a>
-                    <a href="./setup-2.jpg" target="_blank" data-tooltip="recorder camera"><img src="./setup-2.jpg" loading="lazy"></a>
-                    <a href="./setup-3.jpg" target="_blank" data-tooltip="recorder camera"><img src="./setup-3.jpg" loading="lazy"></a>
-                </div>
-            </section>
-            <section>
-                <strong>cruncher:</strong>
-                <ul>
-                    <li>HP EliteDesk 705 G1 DM</li>
-                    <li>Western Digital Elements 1 TB External Hard Drive</li>
-                </ul>
-                <a href="./setup-4.jpg" target="_blank" data-tooltip="cruncher computer (right) + external storage (left)"><img src="./setup-4.jpg" loading="lazy"></a>
-            </section>
-            <section>
-                <strong>code repository:</strong>
-                <p><a href="https://github.com/etrusci-org/skyrecorder" target="_blank">github.com/etrusci-org/skyrecorder</a></p>
-            </section>
-        </article>
+    <main>
+        <div class="recent">
+            <h2>recent view</h2>
+            <p>
+                This image automatically updates every <span class="interval good">?</span> if all systems are running.<br>
+                Last check: <span class="timer last_check good">?</span><br>
+                New image: <span class="timer last_update good">?</span>
+            </p>
+            <p>
+                <img alt="recent view">
+            </p>
+        </div>
     </main>
 
-
-    <footer class="container">
-        <p>skyrecorder &copy; 2024 <a href="https://etrusci.org" target="_blank" data-tooltip="etrusci.org">arT2</a></p>
+    <footer>
+        <p>
+            <strong>SKYRECORDER</strong><br>
+            created and maintained by <a href="https://etrusci.org" target="_blank">arT2</a><br>
+            <a href="https://github.com/etrusci-org/skyrecorder/blob/main/LICENSE.md" target="_blank">LICENSE</a>
+        </p>
     </footer>
 
-
-    <script type="module">
-        import { SKYRECORDER_DATA } from './data.js'
-
-
-        window.addEventListener('load', () => {
-            const SR = new SkyRecorder(SKYRECORDER_DATA)
-        }, false)
-
-
-        class SkyRecorder
-        {
-            data = {}
-            LazyMedia
-            e = {
-                recent_image_selector: 'img.recent',
-                recent_timestamp_selector: 'span.recent.timestamp',
-                timelapse_nav_selector: 'div.timelapse_nav',
-                timelapse_embed_selector: 'div.timelapse_embed',
-                theme_toggle_selector: 'img.theme-toggle',
-                recent_image: null,
-                recent_timestamp: null,
-                timelapse_nav: null,
-                timelapse_embed: null,
-                theme_toggle: null,
-            }
-            recent_image_url = './latest.jpg?t={timestamp}'
-            recent_interval = 600_000
-            recent_tick = 1_000
-            theme = 'light'
-
-
-            constructor(data)
-            {
-                console.log(`skyrecorder <https://sky.etrusci.org>`)
-
-                if (!data) {
-                    console.error('missing data')
-                    return
-                }
-
-                this.data = data
-                this.e.recent_image = document.querySelector(this.e.recent_image_selector),
-                this.e.recent_timestamp = document.querySelector(this.e.recent_timestamp_selector),
-                this.e.timelapse_nav = document.querySelector(this.e.timelapse_nav_selector),
-                this.e.timelapse_embed = document.querySelector(this.e.timelapse_embed_selector),
-                this.e.theme_toggle = document.querySelector(this.e.theme_toggle_selector),
-                this.LazyMedia = new LazyMedia()
-
-                this.e.theme_toggle.addEventListener('click', () => {
-                    if (this.theme == 'light') {
-                        this.theme = 'dark'
-                        this.e.theme_toggle.classList.replace('sun', 'moon')
-                    }
-                    else {
-                        this.theme = 'light'
-                        this.e.theme_toggle.classList.replace('moon', 'sun')
-                    }
-                    document.querySelector('html').dataset.theme = this.theme
-
-                }, false)
-
-                this.#autoupdate_recent_image()
-                this.#render_timelapse_nav()
-            }
-
-
-            #update_recent_image()
-            {
-                this.e.recent_image.setAttribute('src', this.recent_image_url.replace('{timestamp}', Date.now()))
-            }
-
-
-            #autoupdate_recent_image()
-            {
-                let next_update_on = Date.now()
-                let last_update_on = Date.now()
-                let prev_etag = ''
-
-                setInterval(() => {
-                    if (Date.now() >= next_update_on) {
-                        fetch(this.e.recent_image.getAttribute('src'), { method: 'HEAD' })
-                        .then(r => {
-                            let etag = r.headers.get('etag')
-                            if (etag != prev_etag) {
-                                this.#update_recent_image()
-                                last_update_on = Date.now()
-                                prev_etag = etag
-                            }
-                            next_update_on = Date.now() + this.recent_interval
-                        })
-                    }
-                    this.e.recent_timestamp.textContent = ((Date.now() - last_update_on) / 1000).toFixed(0)
-                }, this.recent_tick)
-            }
-
-
-            #render_timelapse_nav()
-            {
-                const month_keys = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']
-
-                Object.keys(this.data.timelapse).sort().reverse().forEach((year) => {
-                    const e1 = document.createElement('nav')
-                    const e2 = document.createElement('ul')
-                    const e3 = document.createElement('li')
-
-                    e2.append(e3)
-                    e1.append(e2)
-                    this.e.timelapse_nav.append(e1)
-
-                    e3.textContent = year
-
-                    month_keys.forEach((month) => {
-                        const e4 = e3.cloneNode()
-                        const e5 = document.createElement((!this.data.timelapse[year][month]) ? 's' : 'a')
-
-                        e2.append(e4)
-                        e4.append(e5)
-
-                        e5.textContent = month
-
-                        if (this.data.timelapse[year][month]) {
-                            e5.dataset['year'] = year
-                            e5.dataset['month'] = month
-                            e5.dataset['tooltip'] = `${this.#get_month_name(year, month)} ${year}`
-
-                            e5.addEventListener('click', (event) => {
-                                this.#render_timelapse_embed(year, month, this.data.timelapse[year][month].dur)
-                            }, false)
-                        }
-                    })
-                })
-            }
-
-
-            #render_timelapse_embed(year, month, dur)
-            {
-                this.e.timelapse_embed.classList.add('hidden')
-                this.e.timelapse_embed.innerHTML = ''
-                this.e.timelapse_embed.textContent = `${year}-${month} · ${this.#get_month_name(year, month)} ${year} · ${dur}`
-
-                this.data.timelapse[year][month].urls.forEach((url) => {
-                    const e1 = document.createElement('div')
-
-                    this.e.timelapse_embed.append(e1)
-
-                    e1.classList.add('lazycode')
-
-                    if (url.includes('youtube.com/')) {
-                        e1.textContent = JSON.stringify({
-                            type: 'youtubevideo',
-                            slug: url.split('?v=')[1],
-                        })
-                    }
-                    else if (url.includes('odysee.com/')) {
-                        e1.textContent = JSON.stringify({
-                            type: 'odyseevideo',
-                            slug: url.split('odysee.com/')[1],
-                        })
-                    }
-                    else {
-                        console.warn(`unknown video platform: ${url}`)
-                        e1.textContent = `unknown video platform: ${url}`
-                    }
-                })
-
-                this.LazyMedia.autoembed()
-
-                this.e.timelapse_embed.classList.remove('hidden')
-            }
-
-
-            #get_month_name(year, month, locale='en-US', format='long')
-            {
-                return new Date(`${year}-${month}`).toLocaleString(locale, { month: format})
-            }
-        }
-
-
-        class LazyMedia {
-            // stripped down version
-            element_selector = '.lazycode'
-            videobox_class = 'videobox'
-            error_class = 'error'
-            slug_template = {
-                // twitchstream: 'https://player.twitch.tv/?muted=false&autoplay=false&channel={SLUG}',
-                // twitchchat: 'https://twitch.tv/embed/{SLUG}',
-                youtubevideo: 'https://youtube.com/embed/{SLUG}?modestbranding=1&color=white&rel=0&start=0',
-                // youtubeplaylist: 'https://youtube.com/embed/videoseries?list={SLUG}&modestbranding=1&color=white&rel=0',
-                odyseevideo: 'https://odysee.com/$/embed/{SLUG}',
-            }
-            autoembed() {
-                this.get_lazycode_elements().forEach(target_element => {
-                    try {
-                        const code = JSON.parse(target_element.innerText)
-                        const baked_element = this.get_baked_element(code)
-                        if (baked_element) {
-                            target_element.replaceWith(baked_element)
-                        }
-                        else {
-                            throw (`bake() returned: ${baked_element}`)
-                        }
-                    }
-                    catch (error) {
-                        console.error(`Error on ${target_element.innerHTML}\n-> ${error}`)
-                        target_element.classList.add(this.error_class)
-                    }
-                })
-            }
-            get_lazycode_elements() {
-                return document.querySelectorAll(this.element_selector)
-            }
-            get_baked_element(code) {
-                let baked_element = null
-                // if (code.type == 'twitchstream') {
-                //     code.slug = this.slug_template.twitchstream.replace('{SLUG}', code.slug)
-                //     baked_element = document.createElement('div')
-                //     baked_element.classList.add(this.videobox_class)
-                //     const inner1 = document.createElement('iframe')
-                //     inner1.setAttribute('src', code.slug)
-                //     inner1.setAttribute('loading', 'lazy')
-                //     inner1.setAttribute('allowfullscreen', 'allowfullscreen')
-                //     inner1.setAttribute('playsinline', 'playsinline')
-                //     this.#add_code_attr(code, inner1)
-                //     this.#add_code_css(code, inner1)
-                //     baked_element.append(inner1)
-                // }
-                // if (code.type == 'twitchchat') {
-                //     code.slug = this.slug_template.twitchchat.replace('{SLUG}', code.slug)
-                //     baked_element = document.createElement('iframe')
-                //     baked_element.setAttribute('src', code.slug)
-                //     baked_element.setAttribute('loading', 'lazy')
-                //     this.#add_code_attr(code, baked_element)
-                //     this.#add_code_css(code, baked_element)
-                // }
-                if (code.type == 'youtubevideo') {
-                    code.slug = this.slug_template.youtubevideo.replace('{SLUG}', code.slug)
-                    if (code.start) {
-                        code.slug = code.slug.replace('start=0', `start=${code.start}`)
-                    }
-                    baked_element = document.createElement('div')
-                    baked_element.classList.add(this.videobox_class)
-                    const inner1 = document.createElement('iframe')
-                    inner1.setAttribute('src', code.slug)
-                    inner1.setAttribute('loading', 'lazy')
-                    inner1.setAttribute('allowfullscreen', 'allowfullscreen')
-                    inner1.setAttribute('playsinline', 'playsinline')
-                    this.#add_code_attr(code, inner1)
-                    this.#add_code_css(code, inner1)
-                    baked_element.append(inner1)
-                }
-                // if (code.type == 'youtubeplaylist') {
-                //     code.slug = this.slug_template.youtubeplaylist.replace('{SLUG}', code.slug)
-                //     baked_element = document.createElement('div')
-                //     baked_element.classList.add(this.videobox_class)
-                //     const inner1 = document.createElement('iframe')
-                //     inner1.setAttribute('src', code.slug)
-                //     inner1.setAttribute('loading', 'lazy')
-                //     inner1.setAttribute('allowfullscreen', 'allowfullscreen')
-                //     inner1.setAttribute('playsinline', 'playsinline')
-                //     this.#add_code_attr(code, inner1)
-                //     this.#add_code_css(code, inner1)
-                //     baked_element.append(inner1)
-                // }
-                if (code.type == 'odyseevideo') {
-                    code.slug = this.slug_template.odyseevideo.replace('{SLUG}', code.slug)
-                    baked_element = document.createElement('div')
-                    baked_element.classList.add(this.videobox_class)
-                    const inner1 = document.createElement('iframe')
-                    inner1.setAttribute('src', code.slug)
-                    inner1.setAttribute('loading', 'lazy')
-                    inner1.setAttribute('allowfullscreen', 'allowfullscreen')
-                    inner1.setAttribute('playsinline', 'playsinline')
-                    this.#add_code_attr(code, inner1)
-                    this.#add_code_css(code, inner1)
-                    baked_element.append(inner1)
-                }
-                return baked_element
-            }
-            #add_code_attr(code, baked_element) {
-                if (code.attr) {
-                    for (const [k, v] of code.attr) {
-                        if (v !== null) {
-                            baked_element.setAttribute(k, v)
-                        }
-                        else {
-                            baked_element.removeAttribute(k)
-                        }
-                    }
-                }
-            }
-            #add_code_css(code, baked_element) {
-                baked_element.classList.add('lazymedia', code.type)
-                if (code.class) {
-                    baked_element.classList.add(...code.class)
-                }
-            }
-        }
-    </script>
+    <script type="module" src="./web.js"></script>
 </body>
 </html>
