@@ -6,7 +6,7 @@ import { SKYRECORDER_DATA as D } from "./data.js"
 const C = {
     recent: {
         img_url: './recent.jpg',
-        check_interval: 30_000,
+        check_interval: 600_000,
         tick_interval: 1_000,
     },
 }
@@ -15,7 +15,6 @@ const E = {
     recent: {
         container: document.querySelector('.recent'),
         img: document.querySelector('.recent img'),
-        interval: document.querySelector('.recent .interval'),
         timer_last_check: document.querySelector('.recent .timer.last_check'),
         timer_last_update: document.querySelector('.recent .timer.last_update'),
     },
@@ -39,14 +38,11 @@ function main()
     console.log(`skyrecorder/web | https://sky.etrusci.org | https://github.com/etrusc-org/skyrecorder`)
 
     if (!E.recent.container) return
-    if (!E.recent.interval) return
 
     if (!window.Worker) {
         alert('Your webbrowser does not seem to support the Web Worker API.')
         return
     }
-
-    E.recent.interval.textContent = fmt_sec_to_dhms(C.recent.check_interval, true)
 
     update_recent_img_src()
 
