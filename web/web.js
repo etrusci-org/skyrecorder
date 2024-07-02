@@ -6,6 +6,7 @@ import { SKYRECORDER_DATA as D } from "./data.js"
 const C = {
     recent: {
         img_url: './recent.jpg',
+        expected_interval: 1800_000,
         check_interval: 600_000,
         tick_interval: 1_000,
     },
@@ -15,6 +16,7 @@ const E = {
     recent: {
         container: document.querySelector('.recent'),
         img: document.querySelector('.recent img'),
+        expected_interval: document.querySelector('.recent .expected_interval'),
         timer_last_check: document.querySelector('.recent .timer.last_check'),
         timer_last_update: document.querySelector('.recent .timer.last_update'),
     },
@@ -25,9 +27,7 @@ const E = {
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-window.addEventListener('load', () => {
-    main()
-}, false)
+window.addEventListener('load', main, false)
 
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -38,11 +38,14 @@ function main()
     console.log(`skyrecorder/web | https://sky.etrusci.org | https://github.com/etrusc-org/skyrecorder`)
 
     if (!E.recent.container) return
+    if (!E.recent.expected_interval) return
 
     if (!window.Worker) {
         alert('Your webbrowser does not seem to support the Web Worker API.')
         return
     }
+
+    E.recent.expected_interval.textContent = fmt_sec_to_dhms(C.recent.expected_interval, true)
 
     update_recent_img_src()
 
@@ -68,14 +71,7 @@ function on_bgworker_msg(ev)
         E.recent.timer_last_check.textContent = fmt_sec_to_dhms(last_check_ago)
         E.recent.timer_last_update.textContent = fmt_sec_to_dhms(timer_ago)
 
-        if (last_check_ago > C.recent.check_interval) {
-            E.recent.timer_last_check.classList.replace('good', 'bad')
-        }
-        else {
-            E.recent.timer_last_check.classList.replace('bad', 'good')
-        }
-
-        if (timer_ago > C.recent.check_interval) {
+        if (timer_ago > C.recent.expected_interval) {
             E.recent.timer_last_update.classList.replace('good', 'bad')
         }
         else {
