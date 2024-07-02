@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+BIN_DIR=$(dirname $(readlink -f $BASH_SOURCE))
+APP_DIR=$(realpath ${BIN_DIR}/..)
+#=============================================
+
+
+#=== CONF
+
+SHARED_BIN_DIR=$(realpath ${APP_DIR}/../shared/bin)
+
+
+#=== MAGIC
+
+screen -d -m -S onnewrec "${BIN_DIR}/onnewrec"
+screen -d -m -S diskusage-os watch -n 1200 "${SHARED_BIN_DIR}/bin/diskusage" "/" "http://elity:3001/api/push/zmPSkWkIq8?status=up&msg=HIGH_USAGE&ping="
+screen -d -m -S diskusage-stor1 watch -n 1200 "${SHARED_BIN_DIR}/bin/diskusage" "/mnt/stor1/skyrecorder/" "http://elity:3001/api/push/aenFlP7964?status=up&msg=HIGH_USAGE&ping="
