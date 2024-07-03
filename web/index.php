@@ -5,13 +5,13 @@ require_once 'conf.php';
 require_once 'data.php';
 ?>
 <!DOCTYPE html>
-<html lang="en-US">
+<html lang="en-US" data-theme="light">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="application-name" content="skyrecorder">
 
-    <link rel="stylesheet" href="./style.css?v=<?php print(filemtime('./style.css')); ?>">
+    <link rel="stylesheet" href="./style.min.css?v=<?php print(filemtime('./style.min.css')); ?>">
 
     <title>skyrecorder</title>
 </head>
@@ -22,7 +22,14 @@ require_once 'data.php';
     </noscript>
 
     <header>
-        <h1>skyrecorder</h1>
+        <div class="grid-2">
+            <div>
+                <h1>skyrecorder</h1>
+            </div>
+            <div>
+                <a class="theme-toggle ico sun"></a>
+            </div>
+        </div>
     </header>
 
     <main>
@@ -59,7 +66,7 @@ require_once 'data.php';
             </p>
             <p>
                 Images and videos © 2024 <a href="https://etrusci.org" target="_blank">arT2</a><br>
-                Source-code is licensed under <a href="https://github.com/etrusci-org/skyrecorder/blob/main/LICENSE.md">The Unlicense</a>
+                Source-code is licensed under <a href="https://github.com/etrusci-org/skyrecorder/blob/main/LICENSE.md" target="_blank">The Unlicense</a>
             </p>
 
             <strong>recorder</strong>:

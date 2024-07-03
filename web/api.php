@@ -10,8 +10,7 @@ $response = [];
 if (isset($_GET['recent_mtime'])) {
     $response['recent_mtime'] = filemtime($conf->recent_img_url);
 }
-if (isset($_GET['timelapse'])) {
-
+else if (isset($_GET['timelapse'])) {
     if (empty($_GET['timelapse'])) {
         $response['timelapse'] = $timelapse_archive;
     }
@@ -41,4 +40,3 @@ else {
 header('content-type: application/json; charset=utf-8');
 print(json_encode($response, JSON_NUMERIC_CHECK | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR));
 exit(0);
-?>

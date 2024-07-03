@@ -6,6 +6,7 @@ const DEV_MODE = false
 
 
 window.addEventListener('load', () => {
+    init_theme_toggle()
     main()
 }, false)
 
@@ -86,7 +87,7 @@ const recent_worker = (recent_img = new HTMLImageElement) =>
         const r = await api_request('recent_mtime')
 
         if (r.recent_mtime != recent_mtime) {
-            recent_img.setAttribute('src', `${recent_img.getAttribute('src')?.split('?')[0] ?? ''}?mtime=${r.recent_mtime}`)
+            recent_img.setAttribute('src', `${recent_img.getAttribute('src')?.split('?')[0]}?mtime=${r.recent_mtime}`)
             recent_img.dataset['mtime'] = r.recent_mtime
             recent_mtime = r.recent_mtime
         }
@@ -104,6 +105,48 @@ const api_request = async (query = '') =>
 const get_month_name = (date, locale='en-US') =>
 {
     return new Date(date).toLocaleString(locale, { month: 'long'})
+}
+
+
+const init_theme_toggle = () =>
+{
+    const current_theme = localStorage.getItem('skyrecorder.web.theme') ?? 'light'
+
+    if (current_theme) {
+        document.documentElement.dataset['theme'] = current_theme
+    }
+
+    const theme_toggle = document.querySelector('a.theme-toggle')
+    if (!(theme_toggle instanceof HTMLAnchorElement)) {
+        console.error('bad theme toggle element')
+        return
+    }
+
+    if (current_theme == 'light') {
+       theme_toggle.classList.replace('moon', 'sun')
+    }
+    else {
+        theme_toggle.classList.replace('sun', 'moon')
+    }
+
+    theme_toggle.addEventListener('click', (event) => {
+        event.preventDefault()
+
+        const current_theme = document.documentElement.dataset['theme']
+        let new_theme = 'light'
+
+        if (current_theme == 'light') {
+            new_theme = 'dark'
+            theme_toggle.classList.replace('sun', 'moon')
+        }
+        else {
+            new_theme = 'light'
+            theme_toggle.classList.replace('moon', 'sun')
+        }
+
+        document.documentElement.dataset['theme'] = new_theme
+        localStorage.setItem('skyrecorder.web.theme', new_theme)
+    })
 }
 
 
