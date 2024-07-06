@@ -49,7 +49,7 @@ require_once 'data.php';
                     <ul>
                         <?php
                         foreach ($timelapse_archive as $date => $month) {
-                            printf('<li><a data-date="%1$s">%1$s</a></li>', $date);
+                            printf('<li><a data-date="%1$s" title="duration: %2$s">%1$s</a></li>', $date, $month['dur']);
                         }
                         ?>
                     </ul>
@@ -60,28 +60,28 @@ require_once 'data.php';
 
         <div class="about">
             <h2>about</h2>
-            <p>
-                This is the continuation of what was put on ice in 2019. Everything was redone from scratch.<br>
-                The main purpose is to record the sky and create monthly timelapses.
-            </p>
+
+            <h3>project</h3>
+            <p>Recording the sky to create monthly timelapses.</p>
             <p>
                 Images and videos © 2024 <a href="https://etrusci.org" target="_blank">arT2</a><br>
                 Source-code is licensed under <a href="https://github.com/etrusci-org/skyrecorder/blob/main/LICENSE.md" target="_blank">The Unlicense</a>
             </p>
 
-            <strong>recorder</strong>:
+            <!-- TODO: add paragraph for vj's and artists who want to use the timelapses or raw recordings for their work. -->
+
+            <h3>hardware</h3>
+            recorder:
             <ul>
                 <li>Raspberry Pi 4 Model B 4GB (Rev 1.1)</li>
                 <li>Logitech C920 HD Pro Webcam</li>
             </ul>
-
-            <strong>cruncher</strong>:
+            cruncher:
             <ul>
                 <li>HP EliteDesk 705 G1 DM</li>
                 <li>Western Digital Elements 1 TB External Hard Drive</li>
             </ul>
-
-            <strong>code repository</strong>:
+            code repository:
             <p><a href="https://github.com/etrusci-org/skyrecorder" target="_blank">github.com/etrusci-org/skyrecorder</a></p>
         </div>
     </main>

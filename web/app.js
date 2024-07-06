@@ -2,7 +2,7 @@
 'use strict'
 
 
-const DEV_MODE = false
+const DEV_MODE = true
 
 
 window.addEventListener('load', () => {
@@ -36,7 +36,8 @@ const main = () =>
 }
 
 
-const render_timelapse_media = async (date = new String, LM = new LazyMedia) => {
+const render_timelapse_media = async (date = new String, LM = new LazyMedia) =>
+{
     const timelapse_media = document.querySelector('.timelapse .media')
     if (!(timelapse_media instanceof HTMLDivElement)) {
         console.error('bad timelapse_media element')
@@ -46,36 +47,41 @@ const render_timelapse_media = async (date = new String, LM = new LazyMedia) => 
     const r = await api_request(`timelapse=${date}`)
 
     timelapse_media.innerHTML = ''
+    timelapse_media.classList.add('loading')
+
+    const e1 = document.createElement('h3')
+    e1.textContent = `→ ${date} · ${get_month_name(date)} ${date.split('-')[0]} · ${r.timelapse.dur}`
+
+    timelapse_media.append(e1)
 
     r.timelapse.urls.forEach(url => {
-        const e1 = document.createElement('div')
-        const e2 = document.createElement('h3')
-
-        e1.classList.add('lazycode')
-        e2.textContent = `→ ${date} · ${get_month_name(date)} ${date.split('-')[0]} · ${r.timelapse.dur}`
+        const e2 = document.createElement('div')
+        e2.classList.add('lazycode')
 
         if (url.includes('youtube.com/')) {
-            e1.textContent = JSON.stringify({
+            e2.textContent = JSON.stringify({
                 type: 'youtubevideo',
                 slug: url.split('?v=')[1],
             })
         }
         else if (url.includes('odysee.com/')) {
-            e1.textContent = JSON.stringify({
+            e2.textContent = JSON.stringify({
                 type: 'odyseevideo',
                 slug: url.split('odysee.com/')[1],
             })
         }
         else {
-            console.warn(`unknown video platform: ${url}`)
-            e1.textContent = `unknown video platform: ${url}`
+            console.warn(`unknown video platform: '${url}'`)
+            e2.textContent = `unknown video platform: '${url}'`
         }
 
         timelapse_media.append(e2)
-        timelapse_media.append(e1)
     })
 
-    if (!DEV_MODE) LM.autoembed()
+    setTimeout(() => {
+        timelapse_media.classList.remove('loading')
+        if (!DEV_MODE) LM.autoembed()
+    }, 1_000)
 }
 
 
