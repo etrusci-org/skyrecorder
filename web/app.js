@@ -2,7 +2,7 @@
 'use strict'
 
 
-const DEV_MODE = true
+const DEV_MODE = false
 
 
 window.addEventListener('load', () => {
