@@ -62,9 +62,11 @@ require_once 'data.php';
             <h2>about</h2>
             <p>Recording the sky to create monthly timelapses.</p>
             <p>
-                Images and videos © 2024 <a href="https://etrusci.org" target="_blank">arT2</a><br>
+                Images and videos © 2024 <a href="https://etrusci.org" target="_blank">arT2</a>
             </p>
-            <!-- TODO: add paragraph for vj's and artists who want to use the timelapses or raw recordings for their work. -->
+            <p>
+                Timelapse archive is hosted on <a href="https://odysee.com/@skyrecorder:c?view=content" target="_blank">odysee.com</a>
+            </p>
         </div>
     </main>
 
