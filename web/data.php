@@ -4,7 +4,9 @@ namespace org\etrusci\sky;
 
 
 $timelapse_archive = [
-    // 2019-03: stopped the project in
+    // '2024-07' => [ 'dur' => '', 'urls' => [] ],
+    // 2024-06: restarted the project
+    // 2019-03: stopped the project
     '2019-02' => [ 'dur' => '1:13:44', 'urls' => ['https://odysee.com/@skyrecorder:c/skyrecorder-timelapse-2019-02:3', 'https://youtube.com/watch?v=Zo5HH-QFbAs'] ],
     '2019-01' => [ 'dur' => '1:09:33', 'urls' => ['https://odysee.com/@skyrecorder:c/skyrecorder-timelapse-2019-01:f', 'https://youtube.com/watch?v=ALnCZ1REx6E'] ],
     '2018-12' => [ 'dur' =>   '59:56', 'urls' => ['https://odysee.com/@skyrecorder:c/skyrecorder-timelapse-2018-12:b', 'https://youtube.com/watch?v=TGK5DJg0-7M'] ],

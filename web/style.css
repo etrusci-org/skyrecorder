@@ -39,7 +39,6 @@ img , iframe {
     margin: 0;
     border-width: 0;
     box-sizing: border-box;
-    vertical-align: top;
 }
 
 html {
@@ -70,8 +69,10 @@ header {
     margin-bottom: 5rem;
 }
 
-header div:nth-child(2) {
-    text-align: right;
+nav { display: inline-block;}
+
+header .grid-2 div:nth-child(2) {
+        text-align: right;
 }
 
 main {
@@ -185,8 +186,8 @@ img, iframe {
 
 .ico {
     display: inline-block;
-    width: 1.5rem;
-    height: 1.5rem;
+    width: 2rem;
+    height: 2rem;
     background-size: contain;
     opacity: .5;
 }
@@ -210,7 +211,6 @@ img, iframe {
 .loading::before {
     content: 'loading...';
 }
-
 
 /* MEDIA QUERIES --------------------------------------- */
 

@@ -23,22 +23,15 @@ require_once 'data.php';
 
     <header>
         <div class="grid-2">
-            <div>
-                <h1>skyrecorder</h1>
-            </div>
-            <div>
-                <a class="theme-toggle ico sun"></a>
-            </div>
+            <div><h1>skyrecorder</h1></div>
+            <div><a class="theme-toggle ico sun"></a></div>
         </div>
     </header>
 
     <main>
         <div class="recent">
             <h2>recent view</h2>
-            <p>
-                This image will automagically update every ~<?php print(($conf->recent_expected_interval / 1000) / 60) ?> minutes if all systems are running.
-                It is dark at night...
-            </p>
+            <p>This image will automagically update every ~<?php print(($conf->recent_expected_interval / 1000) / 60) ?> minutes if all systems are running. It is dark at night...</p>
             <img data-mtime="<?php print(filemtime($conf->recent_img_url)); ?>" src="<?php print($conf->recent_img_url); ?>" alt="recent view">
         </div>
 
@@ -46,13 +39,7 @@ require_once 'data.php';
             <h2>timelapse archive</h2>
             <div class="grid-2">
                 <nav>
-                    <ul>
-                        <?php
-                        foreach ($timelapse_archive as $date => $month) {
-                            printf('<li><a data-date="%1$s" title="duration: %2$s">%1$s</a></li>', $date, $month['dur']);
-                        }
-                        ?>
-                    </ul>
+                    <ul><?php foreach ($timelapse_archive as $date => $month) printf('<li><a data-date="%1$s" title="duration: %2$s">%1$s</a></li>', $date, $month['dur']); ?></ul>
                 </nav>
                 <div class="media"></div>
             </div>
@@ -61,12 +48,8 @@ require_once 'data.php';
         <div class="about">
             <h2>about</h2>
             <p>Recording the sky to create monthly timelapses.</p>
-            <p>
-                Images and videos © 2024 <a href="https://etrusci.org" target="_blank">arT2</a>
-            </p>
-            <p>
-                Timelapse archive is hosted on <a href="https://odysee.com/@skyrecorder:c?view=content" target="_blank">odysee.com</a>
-            </p>
+            <p>Images and videos © 2024 <a href="https://etrusci.org" target="_blank">arT2</a></p>
+            <p>Videos are hosted on <a href="https://odysee.com/@skyrecorder:c?view=content" target="_blank">Odysee</a> and <a href="https://www.youtube.com/playlist?list=PLIfP3a7Gq08B4y7phHDGXPvJ5stvj4VoW" target="_blank">YouTube</a></p>
         </div>
     </main>
 

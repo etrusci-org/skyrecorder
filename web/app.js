@@ -54,9 +54,17 @@ const render_timelapse_media = async (date = new String, LM = new LazyMedia) =>
 
     timelapse_media.append(e1)
 
-    r.timelapse.urls.forEach(url => {
+    for (const k in r.timelapse.urls) {
+        const url = r.timelapse.urls[k]
+
         const e2 = document.createElement('div')
         e2.classList.add('lazycode')
+
+        if (Number(k) > 0) {
+            const e3 = document.createElement('strong')
+            e3.textContent = `mirror #${k}`
+            timelapse_media.append(e3)
+        }
 
         if (url.includes('youtube.com/')) {
             e2.textContent = JSON.stringify({
@@ -76,12 +84,12 @@ const render_timelapse_media = async (date = new String, LM = new LazyMedia) =>
         }
 
         timelapse_media.append(e2)
-    })
+    }
 
     setTimeout(() => {
         timelapse_media.classList.remove('loading')
         if (!DEV_MODE) LM.autoembed()
-    }, 1_000)
+    }, 750)
 }
 
 
