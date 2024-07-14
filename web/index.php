@@ -49,7 +49,8 @@ require_once 'data.php';
             <h2>about</h2>
             <p>Recording the sky to create monthly timelapses.</p>
             <p>Images and videos © 2024 <a href="https://etrusci.org" target="_blank">arT2</a></p>
-            <p>Videos are hosted on <a href="https://odysee.com/@skyrecorder:c?view=content" target="_blank">Odysee</a> and <a href="https://www.youtube.com/playlist?list=PLIfP3a7Gq08B4y7phHDGXPvJ5stvj4VoW" target="_blank">YouTube</a></p>
+            <p>Timelapse videos are hosted on <a href="https://odysee.com/@skyrecorder:c?view=content" target="_blank">Odysee</a> and <a href="https://www.youtube.com/playlist?list=PLIfP3a7Gq08B4y7phHDGXPvJ5stvj4VoW" target="_blank">YouTube</a></p>
+            <!-- <p>VJs/artists <a href="TBA" target="_blank">click here</a>.</p> -->
         </div>
     </main>
 
