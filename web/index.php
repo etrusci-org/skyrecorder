@@ -29,12 +29,6 @@ require_once 'data.php';
     </header>
 
     <main>
-        <div class="recent">
-            <h2>recent view</h2>
-            <p>This image will automagically update every ~<?php print(($conf->recent_expected_interval / 1000) / 60) ?> minutes if all systems are running. It is dark at night...</p>
-            <img data-mtime="<?php print(filemtime($conf->recent_img_url)); ?>" src="<?php print($conf->recent_img_url); ?>" alt="recent view">
-        </div>
-
         <div class="timelapse">
             <h2>timelapse archive</h2>
             <div class="grid-2">
@@ -45,12 +39,20 @@ require_once 'data.php';
             </div>
         </div>
 
+        <div class="recent">
+            <h2>recent view</h2>
+            <p>This image will automagically update every ~<?php print(($conf->recent_expected_interval / 1000) / 60) ?> minutes if all systems are running. It is dark at night...</p>
+            <img data-mtime="<?php print(filemtime($conf->recent_img_url)); ?>" src="<?php print($conf->recent_img_url); ?>" loading="lazy" alt="recent view">
+        </div>
+
         <div class="about">
             <h2>about</h2>
             <p>Recording the sky to create monthly timelapses.</p>
-            <p>Images and videos © 2024 <a href="https://etrusci.org" target="_blank">arT2</a></p>
-            <p>Timelapse videos are hosted on <a href="https://odysee.com/@skyrecorder:c?view=content" target="_blank">Odysee</a> and <a href="https://www.youtube.com/playlist?list=PLIfP3a7Gq08B4y7phHDGXPvJ5stvj4VoW" target="_blank">YouTube</a></p>
-            <!-- <p>VJs/artists <a href="TBA" target="_blank">click here</a>.</p> -->
+            <p>Images and videos © 2024 <a href="https://etrusci.org" target="_blank">arT2</a>.</p>
+            <p>
+                Timelapse videos are hosted on <a href="https://www.youtube.com/playlist?list=PLIfP3a7Gq08B4y7phHDGXPvJ5stvj4VoW" target="_blank">YouTube</a> and <a href="https://odysee.com/@skyrecorder:c?view=content" target="_blank">Odysee</a>.<br>
+                <small>Because of the length/filesize of the new 2024+ timelapses, I can not longer upload them to Odysee because of platform limits.</small>
+            </p>
         </div>
     </main>
 
