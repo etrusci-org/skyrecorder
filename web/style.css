@@ -190,6 +190,7 @@ img, iframe {
     height: 2rem;
     background-size: contain;
     opacity: .5;
+    vertical-align: middle;
 }
 
 .ico:hover, .ico:focus {
@@ -218,4 +219,10 @@ img, iframe {
     body {
         font-size: 8pt;
     }
+}
+
+/* VENDOR ---------------------------------------------- */
+
+.ourspace_webring_widget {
+    display: inline-block;
 }

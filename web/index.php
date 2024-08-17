@@ -35,7 +35,7 @@ require_once 'data.php';
                 <nav>
                     <ul><?php foreach ($timelapse_archive as $date => $month) printf('<li><a data-date="%1$s" title="duration: %2$s">%1$s</a></li>', $date, $month['dur']); ?></ul>
                 </nav>
-                <div class="media"></div>
+                <div class="media">&larr; choose a month</div>
             </div>
         </div>
 
@@ -54,11 +54,15 @@ require_once 'data.php';
                 <small>Because of the length/filesize of the new 2024+ timelapses, I can not longer upload them to Odysee because of platform limits.</small>
             </p>
         </div>
+
+        This website is a member of the ourspace webring:
+        <div class="ourspace_webring_widget"></div>
     </main>
 
     <script>
         const RECENT_CHECK_INTERVAL = <?php print($conf->recent_check_interval); ?>
     </script>
     <script src="./app.js?v=<?php print(filemtime('./app.js')); ?>"></script>
+    <script src="https://ourspace.ch/widget.js/src:3"></script>
 </body>
 </html>
