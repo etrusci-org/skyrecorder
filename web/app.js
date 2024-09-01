@@ -6,7 +6,7 @@ const DEV_MODE = false
 
 
 window.addEventListener('load', () => {
-    init_theme_toggle()
+    // init_theme_toggle()
     main()
 }, false)
 
@@ -122,46 +122,46 @@ const get_month_name = (date, locale='en-US') =>
 }
 
 
-const init_theme_toggle = () =>
-{
-    const current_theme = localStorage.getItem('skyrecorder.web.theme') ?? 'light'
+// const init_theme_toggle = () =>
+// {
+//     const current_theme = localStorage.getItem('skyrecorder.web.theme') ?? 'light'
 
-    if (current_theme) {
-        document.documentElement.dataset['theme'] = current_theme
-    }
+//     if (current_theme) {
+//         document.documentElement.dataset['theme'] = current_theme
+//     }
 
-    const theme_toggle = document.querySelector('a.theme-toggle')
-    if (!(theme_toggle instanceof HTMLAnchorElement)) {
-        console.error('bad theme toggle element')
-        return
-    }
+//     const theme_toggle = document.querySelector('a.theme-toggle')
+//     if (!(theme_toggle instanceof HTMLAnchorElement)) {
+//         console.error('bad theme toggle element')
+//         return
+//     }
 
-    if (current_theme == 'light') {
-       theme_toggle.classList.replace('moon', 'sun')
-    }
-    else {
-        theme_toggle.classList.replace('sun', 'moon')
-    }
+//     if (current_theme == 'light') {
+//        theme_toggle.classList.replace('moon', 'sun')
+//     }
+//     else {
+//         theme_toggle.classList.replace('sun', 'moon')
+//     }
 
-    theme_toggle.addEventListener('click', (event) => {
-        event.preventDefault()
+//     theme_toggle.addEventListener('click', (event) => {
+//         event.preventDefault()
 
-        const current_theme = document.documentElement.dataset['theme']
-        let new_theme = 'light'
+//         const current_theme = document.documentElement.dataset['theme']
+//         let new_theme = 'light'
 
-        if (current_theme == 'light') {
-            new_theme = 'dark'
-            theme_toggle.classList.replace('sun', 'moon')
-        }
-        else {
-            new_theme = 'light'
-            theme_toggle.classList.replace('moon', 'sun')
-        }
+//         if (current_theme == 'light') {
+//             new_theme = 'dark'
+//             theme_toggle.classList.replace('sun', 'moon')
+//         }
+//         else {
+//             new_theme = 'light'
+//             theme_toggle.classList.replace('moon', 'sun')
+//         }
 
-        document.documentElement.dataset['theme'] = new_theme
-        localStorage.setItem('skyrecorder.web.theme', new_theme)
-    })
-}
+//         document.documentElement.dataset['theme'] = new_theme
+//         localStorage.setItem('skyrecorder.web.theme', new_theme)
+//     })
+// }
 
 
 class LazyMedia {

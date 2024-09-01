@@ -5,7 +5,7 @@ require_once 'conf.php';
 require_once 'data.php';
 ?>
 <!DOCTYPE html>
-<html lang="en-US" data-theme="light">
+<html lang="en-US">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -22,10 +22,10 @@ require_once 'data.php';
     </noscript>
 
     <header>
-        <div class="grid-2">
-            <div><h1>skyrecorder</h1></div>
-            <div><a class="theme-toggle ico sun"></a></div>
-        </div>
+        <!-- <div class="grid-2"> -->
+            <h1>skyrecorder</h1>
+            <!-- <div><a class="theme-toggle ico sun"></a></div> -->
+        <!-- </div> -->
     </header>
 
     <main>
@@ -48,7 +48,7 @@ require_once 'data.php';
         <div class="about">
             <h2>about</h2>
             <p>Recording the sky to create monthly timelapses.</p>
-            <p>Images and videos © 2024 <a href="https://etrusci.org" target="_blank">arT2</a>.</p>
+            <p>Videos and images &copy; 2013-2024 <a href="https://etrusci.org" target="_blank">arT2</a>.</p>
             <p>
                 Timelapse videos are hosted on <a href="https://www.youtube.com/playlist?list=PLIfP3a7Gq08B4y7phHDGXPvJ5stvj4VoW" target="_blank">YouTube</a> and <a href="https://odysee.com/@skyrecorder:c?view=content" target="_blank">Odysee</a>.<br>
                 <small>Because of the length/filesize of the new 2024+ timelapses, I can not longer upload them to Odysee because of platform limits.</small>
