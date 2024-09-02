@@ -6,7 +6,7 @@ namespace org\etrusci\sky;
 // dur_sec will be auto-calculated from dur
 
 $timelapse_archive = [
-    // '2024-08' => [ 'dur' => '::', 'dur_sec'=> null, 'urls' => [''] ],
+    '2024-08' => [ 'dur' => '8:02:10', 'dur_sec'=> null, 'urls' => ['https://www.youtube.com/watch?v=4ZGRgf7i-wA'] ],
     '2024-07' => [ 'dur' => '8:46:24', 'dur_sec'=> null, 'urls' => ['https://www.youtube.com/watch?v=rBQK7hf7aPs'] ],
     // 2024-06: restarted the project
     // 2019-03: stopped the project
