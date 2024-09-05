@@ -15,4 +15,4 @@ TECHNICAL INFO
 - The videos in the 'rec-daily' folder contain a whole day each.
 - Filenames are 'YYYY-MM-DD' (year-month-day).
 - Resolution and framerate is currently 1920x1080px @ 5fps.
-- Only the last 30 files are kept here.
+- Only the files of the last month are kept here.

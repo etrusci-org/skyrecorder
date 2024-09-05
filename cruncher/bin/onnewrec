@@ -23,6 +23,7 @@ do
     THUMB_FILE=${THUMB_DIR}/$(basename $f).jpg
 
     ffmpeg -loglevel warning -stats \
+        -y \
         -sseof -1 \
         -i $f \
         -q:v 1 \

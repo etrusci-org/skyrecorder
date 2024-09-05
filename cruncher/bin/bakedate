@@ -15,12 +15,12 @@ PUSH_NOTIFICATION_URL="http://elity:3001/api/push/61yIEdRd5b?status=up&msg=SCRIP
 
 if [ "$#" == "0" ]
 then
-    echo "usage: procrec <DATE>"
+    echo "usage: bakedate <DATE>"
     echo "examples:"
-    echo "> procrec today"
-    echo "> procrec yesterday"
-    echo "> procrec YYYY-MM-DD"
-    echo "> procrec YYYY-MM"
+    echo "> bakedate today"
+    echo "> bakedate yesterday"
+    echo "> bakedate YYYY-MM-DD"
+    echo "> bakedate YYYY-MM"
     exit 1
 fi
 
@@ -57,6 +57,7 @@ echo "combining '${REC_DATE}' videos ..."
 DAILY_FILE=${DAILY_DIR}/${REC_DATE}.mp4
 
 ffmpeg -loglevel warning -stats \
+    -y \
     -f concat -safe 0 \
     -i <(for f in $INPUTS; do echo "file '$f'"; done) \
     -c copy -an \
