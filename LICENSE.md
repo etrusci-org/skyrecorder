@@ -1,6 +1,6 @@
 # skyrecorder - License
 
-Images and videos © 2024 arT2 (<https://etrusci.org>)  
+Videos and images © 2013-2024 [arT2](https://etrusci.org)  
 Source-code is licensed under The Unlicense
 
 

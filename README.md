@@ -6,50 +6,69 @@ The main purpose is to record the sky and create monthly timelapses with as litt
 
 \* = still need to delete old/unused files from time to time *(but i'll automate that too probably)*
 
-Checkout the [website](https://sky.etrusci.org) for the latest view and some more extra info.
+Checkout the [website](https://sky.etrusci.org) for the timelapse video archive and the recent view.
 
-I'll extend this documentation soon with more technical information.
 
-<!--
+
+
 ## Hardware
 
-recorder:
-
+**recorder**:
 - Raspberry Pi 4 Model B 4GB (Rev 1.1)
 - Logitech C920 HD Pro Webcam
 
-cruncher:
-
+**cruncher**:
 - HP EliteDesk 705 G1 DM
 - Western Digital Elements 1 TB External Hard Drive
 
 
 
-## Setup
 
-OS: Debian 12
-
-Run setup/installdeps on both recorder and cruncher to install required software.
-
-Run setup/sysupd on both recorder and cruncher from time to time.
-
-Manually check for recorder/bin/mediamtx/mediamtx updates from time to time.
-
-Setup passwordless keyauth ssh connection between both recorder and cruncher.
-
-Add job to crontab on cruncher to run cruncher/bin/procrec yesterday every night at 0300 or so.
--->
-
-<!-- 
 ## Network Setup
 
-Nothing should be exposed to the internet. Only the **cruncher** needs outgoing internet access to upload the latest view to the web.
+Nothing should be exposed to the internet. Only the **cruncher** needs outgoing internet access to upload the latest view to the web. I still have to rename the hostnames... but for now those will do.
 
 **cruncher**:
 - hostname: elity
-- ip: 192.168.13.111
 
 **recorder**:
 - hostname: studiopi
-- ip: 192.168.13.117
--->
+
+
+
+
+## Recorder and Cruncher Setup
+
+OS for both: Debian 12
+
+Run [shared/bin/installdeps](./shared/bin/installdeps) on both recorder and cruncher to install required software.  
+
+Configure passwordless keyauth SSH connection between recorder and cruncher.
+
+Add job to crontab on cruncher to run `cruncher/bin/bakedate yesterday` every morning. See [cruncher/crontab.txt](./cruncher/crontab.txt).
+
+
+
+
+## Start System
+
+**startbgworkers** will create screen sessions. List them with `screen -ls` or resume with `screen -r <session_name_or_number>`.
+
+**recorder**:
+
+Run [recorder/bin/startbgworkers](./recorder/bin/startbgworkers).
+
+**cruncher**:
+
+Run [cruncher/bin/startbgworkers](./cruncher/bin/startbgworkers).
+
+
+
+
+## Maintenance
+
+Make sure to clean up old files on **cruncher** from time to time since this is not automated yet. On the **recorder** old files will be deleted after a pre-configured timeframe (see `recordDeleteAfter` in [recorder/bin/mediamtx/skyrecorder.yml](./recorder/bin/mediamtx/skyrecorder.yml)).
+
+Run [shared/bin/sysupd](./shared/bin/sysupd) on both recorder and cruncher from time to time.
+
+Manually check for [mediamtx](https://github.com/bluenviron/mediamtx/releases) updates from time to time.
