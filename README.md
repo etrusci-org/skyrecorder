@@ -8,6 +8,8 @@ The main purpose is to record the sky and create monthly timelapses with as litt
 
 Checkout the [website](https://sky.etrusci.org) for the timelapse video archive and the recent view.
 
+This documentation is mainly just here so I don't forget. You may need to adjust the paths and hostnames in all scripts if you clone this repository to your system. There is currently no plan to make this more portable.
+
 
 
 
@@ -36,16 +38,28 @@ Nothing should be exposed to the internet. Only the **cruncher** needs outgoing 
 
 
 
+## Filesystem Setup
+
+**recorder**:
+
+Root: `/home/art2/skyrecorder/`
+
+**cruncher**:
+
+Root: `/mnt/stor1/skyrecorder/`
+
+
+
 
 ## Recorder and Cruncher Setup
 
 OS for both: Debian 12
 
-Run [shared/bin/installdeps](./shared/bin/installdeps) on both recorder and cruncher to install required software.  
+Run [shared/bin/installdeps](./shared/bin/installdeps) on both **recorder** and **cruncher** to install required software.
 
-Configure passwordless keyauth SSH connection between recorder and cruncher.
+Configure passwordless keyauth SSH connection between **recorder** and **cruncher**.
 
-Add job to crontab on cruncher to run `cruncher/bin/bakedate yesterday` every morning. See [cruncher/crontab.txt](./cruncher/crontab.txt).
+Add job to crontab on **cruncher** to run `cruncher/bin/bakedate yesterday` daily. See [cruncher/crontab.txt](./cruncher/crontab.txt).
 
 
 
@@ -69,6 +83,13 @@ Run [cruncher/bin/startbgworkers](./cruncher/bin/startbgworkers).
 
 Make sure to clean up old files on **cruncher** from time to time since this is not automated yet. On the **recorder** old files will be deleted after a pre-configured timeframe (see `recordDeleteAfter` in [recorder/bin/mediamtx/skyrecorder.yml](./recorder/bin/mediamtx/skyrecorder.yml)).
 
-Run [shared/bin/sysupd](./shared/bin/sysupd) on both recorder and cruncher from time to time.
+Run [shared/bin/sysupd](./shared/bin/sysupd) on both **recorder** and **cruncher** from time to time.
 
 Manually check for [mediamtx](https://github.com/bluenviron/mediamtx/releases) updates from time to time.
+
+
+
+
+## License
+
+See [LICENSE](./LICENSE.md).
