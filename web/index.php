@@ -22,10 +22,7 @@ require_once 'data.php';
     </noscript>
 
     <header>
-        <!-- <div class="grid-2"> -->
-            <h1>skyrecorder</h1>
-            <!-- <div><a class="theme-toggle ico sun"></a></div> -->
-        <!-- </div> -->
+        <h1>skyrecorder</h1>
     </header>
 
     <main>
