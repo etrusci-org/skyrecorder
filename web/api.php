@@ -39,6 +39,7 @@ else if (isset($_GET['timelapse'])) {
     if (empty($_GET['timelapse'])) {
         $response['timelapse'] = [];
         foreach ($timelapse_archive as $date => $timelapse) {
+            $timelapse['date'] = $date;
             $timelapse['dur_sec'] = dur_to_sec($timelapse['dur']);
             $response['timelapse'][] = $timelapse;
         }
@@ -46,9 +47,14 @@ else if (isset($_GET['timelapse'])) {
     // ?timelapse=<YYYY-MM>
     else {
         if (preg_match('/[0-9]{4}-[0-9]{2}/', $_GET['timelapse']) == 1) {
-            $response['timelapse'] = $timelapse_archive[$_GET['timelapse']];
-            $response['timelapse']['date'] = $_GET['timelapse'];
-            $response['timelapse']['dur_sec'] = dur_to_sec($response['timelapse']['dur']);
+            if (!array_key_exists($_GET['timelapse'], $timelapse_archive)) {
+                $response['error'] = 'date does not exist';
+            }
+            else {
+                $response['timelapse'] = $timelapse_archive[$_GET['timelapse']];
+                $response['timelapse']['date'] = $_GET['timelapse'];
+                $response['timelapse']['dur_sec'] = dur_to_sec($response['timelapse']['dur']);
+            }
         }
     }
 }
