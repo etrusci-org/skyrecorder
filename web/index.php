@@ -63,6 +63,6 @@ require_once 'data.php';
         const RECENT_CHECK_INTERVAL = <?php print($conf->recent_check_interval); ?>
     </script>
     <script src="./app.js?v=<?php print(filemtime('./app.js')); ?>"></script>
-    <script src="https://ourspace.ch/widget.js/src:3"></script>
+    <!-- <script src="https://ourspace.ch/widget.js/src:3"></script> -->
 </body>
 </html>
