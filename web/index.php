@@ -55,8 +55,8 @@ require_once 'data.php';
             </p>
         </div>
 
-        This website is a member of the ourspace webring:
-        <div class="ourspace_webring_widget"></div>
+        <!-- This website is a member of the ourspace webring:
+        <div class="ourspace_webring_widget"></div> -->
     </main>
 
     <script>
