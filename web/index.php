@@ -46,7 +46,7 @@ require_once 'data.php';
             <h2>about</h2>
             <p>Recording the sky to create monthly timelapses.</p>
             <p>
-                Videos and images &copy; 2013-2024 <a href="https://etrusci.org" target="_blank">arT2</a>.<br>
+                Videos and images &copy; 2013-2025 <a href="https://etrusci.org" target="_blank">arT2</a>.<br>
                 <a href="https://github.com/etrusci-org/skyrecorder" target="_blank">Source-code</a> is licensed under <a href="https://github.com/etrusci-org/skyrecorder/blob/main/LICENSE.md" target="_blank">The Unlicense</a>.
             </p>
             <p>
