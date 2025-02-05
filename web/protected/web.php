@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace org\etrusci\sky;
 
+use stdClass;
 
 // web/protected/data.json must exist and be writable by the webserver process.
 // to force refresh on next page load, empty it... e.g. echo -n > data.json,
@@ -17,6 +18,8 @@ $DATA_FILE = realpath(__DIR__.'/data.json');
 $RECENT_IMG_SRC = './recent.jpg';  # relative from web/public/ or full URL
 $RECENT_UPDATE_INTERVAL = 900;  # seconds
 $DATA_TTL = 86_400 * 30;  # seconds
+// $PDV_API_URL = 'http://127.0.0.1:8090/api/collections/dumps/records/skyrecorder';
+$PDV_API_URL = 'https://pdv.ourspace.ch/api/collections/dumps/records/skyrecorder';
 
 
 
@@ -32,6 +35,12 @@ function month_to_name(string $month, array $names = ['January', 'February', 'Ma
     return $names[intval(substr($month, 5, 2)) - 1];
 }
 
+function month_cmp(stdClass $a, stdClass $b): int
+{
+    return $a->month <=> $b->month;
+}
+
+
 $fresh_data = '';
 
 if (time() - filemtime($DATA_FILE) > $DATA_TTL || filesize($DATA_FILE) <= 1) {
@@ -41,7 +50,7 @@ if (time() - filemtime($DATA_FILE) > $DATA_TTL || filesize($DATA_FILE) <= 1) {
     $curl = curl_init();
 
     curl_setopt_array($curl, [
-        CURLOPT_URL => 'https://pdv.ourspace.ch/api/collections/dumps/records/skyrecorder',
+        CURLOPT_URL => $PDV_API_URL,
         CURLOPT_HEADER => false,
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_CUSTOMREQUEST => 'GET',
@@ -73,3 +82,5 @@ else {
 $dump = json_decode(json: $dump, associative: false);
 
 $DATA = $dump->dump;
+
+usort($DATA, 'org\etrusci\sky\month_cmp');
