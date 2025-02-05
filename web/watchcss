@@ -1,3 +1,0 @@
-#!/usr/bin/env bash
-
-csso --watch --stat --comments none -i ./style.css -o ./style.min.css
