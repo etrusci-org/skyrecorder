@@ -206,7 +206,7 @@ require __DIR__.'/../protected/web.php'; ?>
                 <small>Because of the length/filesize of the new 2024+ timelapses, I can not longer upload them to Odysee because of platform limits.</small>
             </p>
             <p>
-                Advanced users can also access the timelapse video meta data through the <a href="https://pdv.ourspace.ch/api.html#tag/skyrecorder" target="_blank">PolyDataVault API</a>.
+                Advanced users can also access the timelapse video meta data through the <a href="https://pdv.ourspace.ch" target="_blank">PolyDataVault API</a>.
             </p>
         </article>
 
