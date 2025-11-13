@@ -179,8 +179,11 @@ require __DIR__.'/../protected/web.php'; ?>
             <h2 id="recent">recent live view snapshot</h2>
 
             <p>
-                This snapshot of the live view will automagically refresh every ~30 minutes if all systems are running.
-                It is dark at night...
+                <s>
+                    This snapshot of the live view will automagically refresh every ~30 minutes if all systems are running.
+                    It is dark at night...
+                </s>
+                Hardware died on 4. Nov 2024. There won't be a replacement soon. But stay tuned for the future and enjoy the timelapse videos until then.
             </p>
 
             <?php if (!isset($_GET['timelapse'])): ?>
